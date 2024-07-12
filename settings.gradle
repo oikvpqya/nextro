@@ -17,7 +17,27 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "playground"
-include ":androidApp"
-include ":composeApp"
-include ":library"
+rootProject.name = "android-oikvpqya-apps-music"
+// include ":androidApp"
+// include ":composeApp"
+include ":app"
+//include ":library"
+
+// include ":core:datastore"
+// include ":core:mediastore"
+// include ":core:player"
+// include ":core:room"
+
+// include ":domain:common"
+// include ":domain:preference"
+// include ":domain:storage"
+
+// include ":feature:library"
+// include ":feature:main"
+// include ":feature:permission"
+// include ":feature:player"
+// include ":feature:preference"
+
+// include ":ui:coil"
+// include ":ui:component"
+// include ":ui:permission"
