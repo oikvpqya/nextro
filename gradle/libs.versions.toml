@@ -21,7 +21,6 @@ kotlinxCollectionsImmutable = "0.3.7"
 kotlinxCoroutines = "1.8.1"
 kotlinxDatetime = "0.6.0"
 kotlinxSerialization = "1.7.1"
-slackCircuit = "0.22.2"
 tatarkaInject = "0.7.1"
 
 [libraries]
@@ -31,10 +30,8 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDatastore" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
-androidx-media3-common = { module = "androidx.media3:media3-common", version.ref = "androidxMedia3" }
-androidx-media3-exoplayer-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidxMedia3" }
+androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidxMedia3" }
 androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "androidxMedia3" }
-androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidxMedia3" }
 # https://developer.android.com/kotlin/multiplatform/room
 # https://developer.android.com/kotlin/multiplatform/sqlite
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
@@ -42,7 +39,6 @@ androidx-paging-compose = { module = "androidx.paging:paging-compose", version.r
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidxSqlite" }
-androidx-sqlite-framework = { module = "androidx.sqlite:sqlite-framework", version.ref = "androidxSqlite" }
 coil-coil2-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCoil2" }
 coil-coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCoil3" }
 coil-coil3-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCoil3" }
@@ -57,7 +53,6 @@ kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-slack-circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "slackCircuit" }
 tatarka-inject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "tatarkaInject" }
 tatarka-inject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", version.ref = "tatarkaInject" }
 
@@ -73,4 +68,4 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-androidx-media3 = ["androidx-media3-common", "androidx-media3-exoplayer-exoplayer", "androidx-media3-session"]
+androidx-media3 = ["androidx-media3-exoplayer", "androidx-media3-session"]

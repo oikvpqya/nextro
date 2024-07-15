@@ -3,7 +3,7 @@ package me.oikvpqya.apps.music.app.di
 import android.content.Context
 import me.oikvpqya.apps.music.coil.di.CoilComponent
 import me.oikvpqya.apps.music.datastore.di.PreferenceComponent
-import me.oikvpqya.apps.music.media3.di.AppMediaComponent
+import me.oikvpqya.apps.music.media3.di.AppMediaControllerComponent
 import me.oikvpqya.apps.music.mediastore.di.AppMediaStoreComponent
 import me.oikvpqya.apps.music.room.di.AppDatabaseComponent
 import me.tatarka.inject.annotations.Component
@@ -21,7 +21,7 @@ abstract class ApplicationComponent(
     AppMediaStoreComponent,
     AppDatabaseComponent,
     PreferenceComponent,
-    AppMediaComponent
+    AppMediaControllerComponent
 
 interface ApplicationComponentProvider {
     val component: ApplicationComponent

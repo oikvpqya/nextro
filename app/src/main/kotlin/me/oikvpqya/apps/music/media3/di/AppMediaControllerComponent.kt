@@ -5,7 +5,7 @@ import me.oikvpqya.apps.music.media3.AppMediaController
 import me.oikvpqya.apps.music.media3.AppMediaControllerImpl
 import me.tatarka.inject.annotations.Provides
 
-interface AppMediaComponent {
+interface AppMediaControllerComponent {
 
     @ApplicationScope
     @Provides
