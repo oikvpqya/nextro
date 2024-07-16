@@ -2,16 +2,18 @@ package me.oikvpqya.apps.music.feature
 
 import kotlinx.serialization.Serializable
 
-sealed interface Destination {
+interface Destination
+
+sealed interface AppDestination : Destination {
 
     @Serializable
-    data object Main : Destination
+    data object Main : AppDestination
 
     @Serializable
-    data object Preference : Destination
+    data object Preference : AppDestination
 }
 
-sealed interface MainDestination {
+sealed interface MainDestination : Destination {
 
     @Serializable
     data object Albums : MainDestination
@@ -29,7 +31,28 @@ sealed interface MainDestination {
     data object Songs : MainDestination
 }
 
-sealed interface AlbumsDestination {
+sealed interface PreferenceDestination : Destination {
+
+    @Serializable
+    data object Root : PreferenceDestination
+}
+
+val MainDestination.startDestination: Destination
+    get() = when (this) {
+        MainDestination.Albums -> AlbumsDestination.Albums
+        MainDestination.Artists -> ArtistsDestination.Artists
+        MainDestination.Home -> HomeDestination.Home
+        MainDestination.Playlists -> PlaylistsDestination.Playlists
+        MainDestination.Songs -> SongsDestination.Songs
+    }
+
+val AppDestination.startDestination: Destination
+    get() = when (this) {
+        AppDestination.Main -> MainDestination.Home
+        AppDestination.Preference -> PreferenceDestination.Root
+    }
+
+sealed interface AlbumsDestination : Destination {
 
     @Serializable
     data object Albums : AlbumsDestination
@@ -42,7 +65,7 @@ sealed interface AlbumsDestination {
     ) : AlbumsDestination
 }
 
-sealed interface ArtistsDestination {
+sealed interface ArtistsDestination : Destination {
 
     @Serializable
     data object Artists : ArtistsDestination
@@ -55,7 +78,7 @@ sealed interface ArtistsDestination {
     ) : ArtistsDestination
 }
 
-sealed interface HomeDestination {
+sealed interface HomeDestination : Destination {
 
     @Serializable
     data object Home : HomeDestination
@@ -82,7 +105,7 @@ sealed interface HomeDestination {
     ) : HomeDestination
 }
 
-sealed interface PlaylistsDestination {
+sealed interface PlaylistsDestination : Destination {
 
     @Serializable
     data object Playlists : PlaylistsDestination
@@ -95,7 +118,7 @@ sealed interface PlaylistsDestination {
     ) : PlaylistsDestination
 }
 
-sealed interface SongsDestination {
+sealed interface SongsDestination : Destination {
 
     @Serializable
     data object Songs : SongsDestination

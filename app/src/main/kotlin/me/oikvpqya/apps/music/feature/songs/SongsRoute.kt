@@ -16,6 +16,7 @@ import me.oikvpqya.apps.music.feature.LibraryRouteFactory
 import me.oikvpqya.apps.music.feature.MainDestination
 import me.oikvpqya.apps.music.feature.SongsDestination
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.tatarka.inject.annotations.Inject
 
@@ -25,7 +26,7 @@ class SongsRouteFactory(
 ) : LibraryRouteFactory {
     override fun NavGraphBuilder.create(navController: NavController, modifier: Modifier) {
         navigation<MainDestination.Songs>(
-            startDestination = SongsDestination.Songs,
+            startDestination = MainDestination.Songs.startDestination,
         ) {
             composable<SongsDestination.Songs> { _ ->
                 val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }

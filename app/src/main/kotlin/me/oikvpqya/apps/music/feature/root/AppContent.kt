@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import me.oikvpqya.apps.music.feature.Destination
+import me.oikvpqya.apps.music.feature.AppDestination
 import me.oikvpqya.apps.music.feature.RootRouteFactory
 import me.oikvpqya.apps.music.feature.permission.PermissionRoute
 import me.oikvpqya.apps.music.media3.AppMediaController
@@ -115,7 +115,7 @@ fun AppRoot(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Destination.Main,
+        startDestination = AppDestination.Main,
     ) {
         create(
             factories =  factories,

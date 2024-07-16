@@ -14,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import me.oikvpqya.apps.music.feature.MainDestination
+import me.oikvpqya.apps.music.feature.AppDestination
 import me.oikvpqya.apps.music.ui.util.LocalAppSnackbarHandler
 import me.oikvpqya.apps.music.feature.main.component.MainBottomBar
 import me.oikvpqya.apps.music.feature.player.PlayerScreen
 import me.oikvpqya.apps.music.feature.main.component.MainScaffold
+import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.ui.component.CollapsingPlayerContainer
 import me.oikvpqya.apps.music.ui.navigation.RouteFactory
 import me.oikvpqya.apps.music.ui.navigation.create
@@ -71,7 +72,7 @@ fun MainScreen(
                     .navigationBarsPadding()
                     .padding(bottom = LIST_TRACK_CONTAINER_HEIGHT),
                 navController = navController,
-                startDestination = MainDestination.Home,
+                startDestination = AppDestination.Main.startDestination,
             ) {
                 create(
                     factories = routeFactories,

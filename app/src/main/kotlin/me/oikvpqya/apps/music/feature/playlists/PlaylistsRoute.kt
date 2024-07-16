@@ -19,6 +19,7 @@ import me.oikvpqya.apps.music.feature.PlaylistsDestination
 import me.oikvpqya.apps.music.feature.library.route.PlaylistDetailRoute
 import me.oikvpqya.apps.music.feature.library.screen.LibrariesGridScreen
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Tag
 import me.oikvpqya.apps.music.model.asPlaylistTag
@@ -30,7 +31,7 @@ class PlaylistsRouteFactory(
 ) : LibraryRouteFactory {
     override fun NavGraphBuilder.create(navController: NavController, modifier: Modifier) {
         navigation<MainDestination.Playlists>(
-            startDestination = PlaylistsDestination.Playlists,
+            startDestination = MainDestination.Playlists.startDestination,
         ) {
             composable<PlaylistsDestination.Playlists> { _ ->
                 val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }

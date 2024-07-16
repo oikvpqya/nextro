@@ -21,6 +21,7 @@ import me.oikvpqya.apps.music.feature.library.route.AlbumDetailRoute
 import me.oikvpqya.apps.music.feature.library.route.ArtistDetailRoute
 import me.oikvpqya.apps.music.feature.library.route.PlaylistDetailRoute
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.model.Libraries
 import me.tatarka.inject.annotations.Inject
 
@@ -30,7 +31,7 @@ class HomeRouteFactory(
 ) : LibraryRouteFactory {
     override fun NavGraphBuilder.create(navController: NavController, modifier: Modifier) {
         navigation<MainDestination.Home>(
-            startDestination = HomeDestination.Home,
+            startDestination = MainDestination.Home.startDestination,
         ) {
             composable<HomeDestination.Home> { _ ->
                 val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }

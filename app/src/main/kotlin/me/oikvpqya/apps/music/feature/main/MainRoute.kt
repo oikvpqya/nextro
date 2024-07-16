@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import me.oikvpqya.apps.music.feature.Destination
+import me.oikvpqya.apps.music.feature.AppDestination
 import me.oikvpqya.apps.music.feature.LibraryRouteFactory
 import me.oikvpqya.apps.music.feature.RootRouteFactory
 import me.oikvpqya.apps.music.ui.navigation.RouteFactory
@@ -20,7 +20,7 @@ class MainRouteFactory(
     private val viewModelFactory: () -> MainViewModel,
 ) : RootRouteFactory {
     override fun NavGraphBuilder.create(navController: NavController, modifier: Modifier) {
-        composable<Destination.Main> { _ ->
+        composable<AppDestination.Main> { _ ->
             val viewModel = viewModel { viewModelFactory() }
             MainRoute(navController, routeFactories, viewModel, modifier)
         }

@@ -59,12 +59,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import me.oikvpqya.apps.music.R
 import me.oikvpqya.apps.music.feature.MainDestination
+import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.ui.component.AppIcons
 import me.oikvpqya.apps.music.ui.util.BOTTOM_BAR_CONTAINER_HEIGHT
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_CONTAINER_HEIGHT
@@ -367,14 +366,12 @@ fun MainScaffold(
 
 @Composable
 fun MainBottomBar(
-    navController: NavHostController,
+    navController: NavController,
     modifier: Modifier = Modifier,
     alwaysShowLabel: Boolean = false,
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-        .also { println("hierarchy: ${ it?.hierarchy?.toImmutableList() }") }
-        .also { println("destination: $it") }
 
     Row(
         modifier = modifier
@@ -386,16 +383,25 @@ fun MainBottomBar(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Items.forEach { item ->
+            val selected = currentDestination?.hierarchy
+                ?.any { it.hasRoute(item.route::class) }
+                ?: false
             NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any { it.hasRoute(item.route::class) }
-                    ?: false,
+                selected = selected,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (selected) {
+                        navController.popBackStack(
+                            route = item.route.startDestination,
+                            inclusive = false,
+                        )
+                    } else {
+                        navController.navigate(item.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 icon = {
