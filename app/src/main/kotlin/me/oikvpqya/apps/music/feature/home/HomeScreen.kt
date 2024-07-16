@@ -2,7 +2,7 @@ package me.oikvpqya.apps.music.feature.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.collections.immutable.ImmutableList
 import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
@@ -17,6 +18,7 @@ import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.ui.component.ColumnLibrariesContainer
 import me.oikvpqya.apps.music.ui.component.ColumnLibraryContainer
+import me.oikvpqya.apps.music.ui.component.FastScrollerScrollbar
 import me.oikvpqya.apps.music.ui.component.HeaderContainer
 import me.oikvpqya.apps.music.ui.component.RandomTiledLibraryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
@@ -34,23 +36,19 @@ fun HomeScreen(
 ) {
     val scrollableState = rememberLazyListState()
 
-    Column(
-        modifier
+    Box(
+        modifier = modifier.fillMaxSize()
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            MainContent(
-                favoriteSongs = favoriteSongs,
-                historySongs = historySongs,
-                suggestionSongs = suggestionSongs,
-                topSongs = topSongs,
-                topArtists = topArtists,
-                topAlbums = topAlbums,
-                scrollableState = scrollableState,
-                onLibrariesClick = onLibrariesClick
-            )
-        }
+        MainContent(
+            favoriteSongs = favoriteSongs,
+            historySongs = historySongs,
+            suggestionSongs = suggestionSongs,
+            topSongs = topSongs,
+            topArtists = topArtists,
+            topAlbums = topAlbums,
+            scrollableState = scrollableState,
+            onLibrariesClick = onLibrariesClick
+        )
     }
 }
 
@@ -130,22 +128,6 @@ private fun BoxScope.MainContent(
             onMoreClick = {}
         )
     }
-
-//    val itemsAvailable = (14).coerceAtLeast(1)
-//    val scrollbarState = scrollableState.scrollbarState(
-//        itemsAvailable = itemsAvailable,
-//    )
-//    scrollableState.DraggableScrollbar(
-//        modifier = Modifier
-//            .fillMaxHeight()
-//            .padding(horizontal = 2.dp)
-//            .align(Alignment.TopEnd),
-//        state = scrollbarState,
-//        orientation = Orientation.Vertical,
-//        onThumbMoved = scrollableState.rememberDraggableScroller(
-//            itemsAvailable = itemsAvailable,
-//        ),
-//    )
 }
 
 private fun LazyListScope.homeLibraryContainer(

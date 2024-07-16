@@ -18,6 +18,7 @@ import me.oikvpqya.apps.music.feature.MainDestination
 import me.oikvpqya.apps.music.feature.library.route.AlbumDetailRoute
 import me.oikvpqya.apps.music.feature.library.screen.LibrariesGridScreen
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.main.component.TopBarScreen
 import me.oikvpqya.apps.music.feature.startDestination
 import me.tatarka.inject.annotations.Inject
 
@@ -48,15 +49,17 @@ fun AlbumsRoute(
     modifier: Modifier = Modifier,
 ) {
     val albums by viewModel.albumsSharedFlow.collectAsStateWithLifecycle(persistentListOf())
-//    val mediaHandler by LocalMediaHandlerState.current
-    LibrariesGridScreen(
+    TopBarScreen(
         modifier = modifier,
-        libraries = albums,
-        onItemClick = { libraries ->
-            navController.navigate(
-                with(libraries) { AlbumsDestination.Detail(name, summary, tag.albumId) }
-            )
-//            mediaHandler?.playSongs(songs, 0)
-        }
-    )
+        title = "Albums",
+    ) {
+        LibrariesGridScreen(
+            libraries = albums,
+            onItemClick = { libraries ->
+                navController.navigate(
+                    with(libraries) { AlbumsDestination.Detail(name, summary, tag.albumId) }
+                )
+            }
+        )
+    }
 }

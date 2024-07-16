@@ -1,7 +1,7 @@
 plugins {
     alias libs.plugins.android.application
-    alias libs.plugins.google.ksp
     alias libs.plugins.compose.compiler
+    alias libs.plugins.google.ksp
     alias libs.plugins.kotlin.android
     alias libs.plugins.kotlin.serialization
 }
@@ -59,12 +59,14 @@ dependencies {
     implementation "androidx.compose.material3:material3"
     implementation "androidx.compose.material3:material3-window-size-class"
     implementation "androidx.compose.ui:ui"
+    implementation "io.github.oikvpqya.compose.fastscroller:fastscroller-core:0.2.0"
+    implementation "io.github.oikvpqya.compose.fastscroller:fastscroller-indicator:0.2.0"
+    implementation "io.github.oikvpqya.compose.fastscroller:fastscroller-material3:0.2.0"
 
     implementation libs.androidx.activity.compose
     implementation libs.androidx.lifecycle.runtime.compose
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.navigation.compose
-    implementation libs.androidx.paging.compose
     implementation libs.coil.coil2.compose
     implementation libs.google.accompanist.permissions
 

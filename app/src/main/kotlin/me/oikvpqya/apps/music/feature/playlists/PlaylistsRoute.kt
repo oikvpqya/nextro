@@ -19,6 +19,7 @@ import me.oikvpqya.apps.music.feature.PlaylistsDestination
 import me.oikvpqya.apps.music.feature.library.route.PlaylistDetailRoute
 import me.oikvpqya.apps.music.feature.library.screen.LibrariesGridScreen
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.main.component.TopBarScreen
 import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Tag
@@ -60,13 +61,17 @@ fun PlaylistsRoute(
         size = favorite.size
     )
     val items = ((playlists + favoritePlaylist).sortedBy { it.name }).toImmutableList()
-    LibrariesGridScreen(
+    TopBarScreen(
         modifier = modifier,
-        libraries = items,
-        onItemClick = { libraries ->
-            navController.navigate(
-                with(libraries) { PlaylistsDestination.Detail(name, summary, tag.albumId) }
-            )
-        }
-    )
+        title = "Playlists",
+    ) {
+        LibrariesGridScreen(
+            libraries = items,
+            onItemClick = { libraries ->
+                navController.navigate(
+                    with(libraries) { PlaylistsDestination.Detail(name, summary, tag.albumId) }
+                )
+            }
+        )
+    }
 }

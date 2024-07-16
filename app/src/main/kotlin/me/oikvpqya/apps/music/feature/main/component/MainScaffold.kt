@@ -1,7 +1,6 @@
 package me.oikvpqya.apps.music.feature.main.component
 
 import androidx.activity.compose.BackHandler
-import androidx.annotation.StringRes
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
@@ -16,55 +15,33 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
 import androidx.compose.ui.util.fastFirst
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
-import me.oikvpqya.apps.music.R
-import me.oikvpqya.apps.music.feature.MainDestination
-import me.oikvpqya.apps.music.feature.startDestination
-import me.oikvpqya.apps.music.ui.component.AppIcons
 import me.oikvpqya.apps.music.ui.util.BOTTOM_BAR_CONTAINER_HEIGHT
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_CONTAINER_HEIGHT
 import kotlin.math.pow
@@ -88,7 +65,6 @@ private const val SnackbarLayoutIdTag = "snackbar"
 )
 @Composable
 fun MainScaffold(
-    navController: NavController,
     bottomBar: @Composable () -> Unit,
     collapsedBottomSheet: @Composable () -> Unit,
     expandedBottomSheet: @Composable () -> Unit,
@@ -103,8 +79,6 @@ fun MainScaffold(
 ) {
     val density = LocalDensity.current
     val coroutineScope = rememberCoroutineScope()
-//    val navBackStackEntry by navController.currentBackStackEntryAsState()
-//    val currentDestination = navBackStackEntry?.destination
     val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
         .also {
             it.state.heightOffsetLimit = with(density) { -(BOTTOM_BAR_CONTAINER_HEIGHT.toPx()) }
@@ -156,16 +130,6 @@ fun MainScaffold(
             ) { scrollBehavior.state.heightOffset = value }
     }
 
-//    LaunchedEffect(currentDestination) {
-//        if (currentDestination != null && scrollBehavior.state.collapsedFraction == 1f) {
-//            AnimationState(initialValue = scrollBehavior.state.heightOffset)
-//                .animateTo(
-//                    targetValue = 0f,
-//                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-//                ) { scrollBehavior.state.heightOffset = value }
-//        }
-//    }
-
     val bottomBarOffsetProgress: Float by animateFloatAsState(
         targetValue = if (isCollapsingBottomBar) 0f else 1f,
         animationSpec = animationSpec,
@@ -208,12 +172,12 @@ fun MainScaffold(
             Surface(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = 24.dp * (1f - progress),
-                            topEnd = 24.dp * (1f - progress)
-                        )
-                    )
+//                    .clip(
+//                        RoundedCornerShape(
+//                            topStart = 24.dp * (1f - progress),
+//                            topEnd = 24.dp * (1f - progress)
+//                        )
+//                    )
                     .anchoredDraggable(
                         state = anchoredDraggableState,
                         orientation = Orientation.Vertical,
@@ -251,7 +215,7 @@ fun MainScaffold(
             ) { snackbar() }
             Box(
                 modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+//                    .nestedScroll(scrollBehavior.nestedScrollConnection)
                     .layoutId(ContentLayoutIdTag)
             ) { content() }
             BackHandler(bottomSheetValue == BottomSheetDragValue.EXPANDED) {
@@ -310,14 +274,14 @@ fun MainScaffold(
                 )
             )
 
-//        val contentHeight = layoutHeight - bottomSheetOffsetFromBottom
+        val contentHeight = layoutHeight - bottomSheetOffsetFromBottom
 //        val contentHeight = layoutHeight - if (isCollapsingBottomBar) systemBarOffsetFromBottom else bottomBarOffsetFromBottom
         val contentPlaceable = measurables
             .fastFirst { it.layoutId == ContentLayoutIdTag }
             .measure(
                 constraints.copy(
-                    minHeight = layoutHeight,
-                    maxHeight = layoutHeight
+                    minHeight = contentHeight,
+                    maxHeight = contentHeight
                 )
             )
 
@@ -363,90 +327,3 @@ fun MainScaffold(
         }
     }
 }
-
-@Composable
-fun MainBottomBar(
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    alwaysShowLabel: Boolean = false,
-) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-
-    Row(
-        modifier = modifier
-            .navigationBarsPadding()
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = BOTTOM_BAR_CONTAINER_HEIGHT)
-            .selectableGroup(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Items.forEach { item ->
-            val selected = currentDestination?.hierarchy
-                ?.any { it.hasRoute(item.route::class) }
-                ?: false
-            NavigationBarItem(
-                selected = selected,
-                onClick = {
-                    if (selected) {
-                        navController.popBackStack(
-                            route = item.route.startDestination,
-                            inclusive = false,
-                        )
-                    } else {
-                        navController.navigate(item.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                },
-                icon = {
-                    Icon(item.icon, contentDescription = null)
-                },
-                label = {
-                    Text(stringResource(item.titleRes))
-                },
-                alwaysShowLabel = alwaysShowLabel,
-            )
-        }
-    }
-}
-
-private data class Item(
-    @StringRes
-    val titleRes: Int,
-    val icon: ImageVector,
-    val route: MainDestination,
-)
-
-private val Items = listOf(
-    Item(
-        R.string.home,
-        AppIcons.ForYou,
-        MainDestination.Home,
-    ),
-    Item(
-        R.string.albums,
-        AppIcons.Albums,
-        MainDestination.Albums,
-    ),
-    Item(
-        R.string.artists,
-        AppIcons.Artists,
-        MainDestination.Artists,
-    ),
-    Item(
-        R.string.playlists,
-        AppIcons.Playlists,
-        MainDestination.Playlists,
-    ),
-    Item(
-        R.string.songs,
-        AppIcons.Song,
-        MainDestination.Songs,
-    )
-)

@@ -16,6 +16,7 @@ import me.oikvpqya.apps.music.feature.LibraryRouteFactory
 import me.oikvpqya.apps.music.feature.MainDestination
 import me.oikvpqya.apps.music.feature.SongsDestination
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.main.component.TopBarScreen
 import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.tatarka.inject.annotations.Inject
@@ -44,11 +45,15 @@ fun SongsRoute(
 ) {
     val songs by viewModel.songsSharedFlow.collectAsStateWithLifecycle(persistentListOf())
     val mediaHandler by LocalMediaHandlerState.current
-    SongsScreen(
+    TopBarScreen(
         modifier = modifier,
-        items = songs,
-        onItemClick = { index ->
-            mediaHandler?.playSongs(items = songs, index = index)
-        },
-    )
+        title = "Songs",
+    ) {
+        SongsScreen(
+            items = songs,
+            onItemClick = { index ->
+                mediaHandler?.playSongs(items = songs, index = index)
+            },
+        )
+    }
 }

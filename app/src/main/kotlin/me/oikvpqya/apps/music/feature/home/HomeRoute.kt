@@ -21,6 +21,7 @@ import me.oikvpqya.apps.music.feature.library.route.AlbumDetailRoute
 import me.oikvpqya.apps.music.feature.library.route.ArtistDetailRoute
 import me.oikvpqya.apps.music.feature.library.route.PlaylistDetailRoute
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
+import me.oikvpqya.apps.music.feature.main.component.TopBarScreen
 import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.model.Libraries
 import me.tatarka.inject.annotations.Inject
@@ -78,28 +79,35 @@ fun HomeRoute(
         .map { it.take(4).toImmutableList() }
         .collectAsStateWithLifecycle(persistentListOf())
 
-    HomeScreen(
-        favoriteSongs = favoriteSongs,
-        historySongs = historySongs,
-        suggestionSongs = shuffledSongs,
-        topAlbums = topAlbums,
-        topArtists = topArtists,
-        topSongs = topSongs,
+    TopBarScreen(
         modifier = modifier,
-        onLibrariesClick = { libraries ->
-            with(libraries) {
-                when (this) {
-                    is Libraries.Album -> navController.navigate(
-                        HomeDestination.AlbumDetail(name, summary, tag.albumId)
-                    )
-                    is Libraries.Default -> navController.navigate(
-                        HomeDestination.ArtistDetail(name, summary, tag.albumId)
-                    )
-                    is Libraries.Playlist -> navController.navigate(
-                        HomeDestination.PlaylistDetail(name, summary, tag.albumId)
-                    )
+        title = "Home",
+    ) {
+        HomeScreen(
+            favoriteSongs = favoriteSongs,
+            historySongs = historySongs,
+            suggestionSongs = shuffledSongs,
+            topAlbums = topAlbums,
+            topArtists = topArtists,
+            topSongs = topSongs,
+            modifier = modifier,
+            onLibrariesClick = { libraries ->
+                with(libraries) {
+                    when (this) {
+                        is Libraries.Album -> navController.navigate(
+                            HomeDestination.AlbumDetail(name, summary, tag.albumId)
+                        )
+
+                        is Libraries.Default -> navController.navigate(
+                            HomeDestination.ArtistDetail(name, summary, tag.albumId)
+                        )
+
+                        is Libraries.Playlist -> navController.navigate(
+                            HomeDestination.PlaylistDetail(name, summary, tag.albumId)
+                        )
+                    }
                 }
             }
-        }
-    )
+        )
+    }
 }
