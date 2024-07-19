@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import me.oikvpqya.apps.music.feature.AppDestination
-import me.oikvpqya.apps.music.feature.LibraryRouteFactory
+import me.oikvpqya.apps.music.feature.library.route.LibraryRouteFactory
 import me.oikvpqya.apps.music.feature.RootRouteFactory
 import me.oikvpqya.apps.music.ui.navigation.RouteFactory
 import me.tatarka.inject.annotations.Inject

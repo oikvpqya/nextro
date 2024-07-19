@@ -58,7 +58,21 @@ sealed interface AlbumsDestination : Destination {
     data object Albums : AlbumsDestination
 
     @Serializable
-    data class Detail(
+    data class AlbumDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : AlbumsDestination
+
+    @Serializable
+    data class ArtistDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : AlbumsDestination
+
+    @Serializable
+    data class PlaylistDetail(
         val name: String,
         val summary: String,
         val albumId: Long,
@@ -71,7 +85,21 @@ sealed interface ArtistsDestination : Destination {
     data object Artists : ArtistsDestination
 
     @Serializable
-    data class Detail(
+    data class AlbumDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : ArtistsDestination
+
+    @Serializable
+    data class ArtistDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : ArtistsDestination
+
+    @Serializable
+    data class PlaylistDetail(
         val name: String,
         val summary: String,
         val albumId: Long,
@@ -111,7 +139,21 @@ sealed interface PlaylistsDestination : Destination {
     data object Playlists : PlaylistsDestination
 
     @Serializable
-    data class Detail(
+    data class AlbumDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : PlaylistsDestination
+
+    @Serializable
+    data class ArtistDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : PlaylistsDestination
+
+    @Serializable
+    data class PlaylistDetail(
         val name: String,
         val summary: String,
         val albumId: Long,
@@ -122,4 +164,25 @@ sealed interface SongsDestination : Destination {
 
     @Serializable
     data object Songs : SongsDestination
+
+    @Serializable
+    data class AlbumDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : SongsDestination
+
+    @Serializable
+    data class ArtistDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : SongsDestination
+
+    @Serializable
+    data class PlaylistDetail(
+        val name: String,
+        val summary: String,
+        val albumId: Long,
+    ) : SongsDestination
 }

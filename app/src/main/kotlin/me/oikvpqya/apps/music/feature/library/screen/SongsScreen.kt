@@ -1,9 +1,8 @@
-package me.oikvpqya.apps.music.feature.songs
+package me.oikvpqya.apps.music.feature.library.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,12 +10,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.github.oikvpqya.compose.fastscroller.rememberScrollbarAdapter
 import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.model.Library
-import me.oikvpqya.apps.music.ui.component.FastScrollerScrollbar
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 import me.oikvpqya.apps.music.ui.component.TrackContainer
@@ -38,10 +34,6 @@ internal fun SongsScreen(
             scrollableState = scrollableState,
             items = items,
             onItemClick = onItemClick,
-        )
-        FastScrollerScrollbar(
-            modifier = Modifier.align(Alignment.TopEnd).fillMaxHeight(),
-            adapter = rememberScrollbarAdapter(scrollableState),
         )
     }
 }
@@ -72,20 +64,4 @@ private fun BoxScope.MainContent(
             )
         }
     }
-
-//    val itemsAvailable = items.size.coerceAtLeast(1)
-//    val scrollbarState = scrollableState.scrollbarState(
-//        itemsAvailable = itemsAvailable,
-//    )
-//    scrollableState.DraggableScrollbar(
-//        modifier = Modifier
-//            .fillMaxHeight()
-//            .padding(horizontal = 2.dp)
-//            .align(Alignment.TopEnd),
-//        state = scrollbarState,
-//        orientation = Orientation.Vertical,
-//        onThumbMoved = scrollableState.rememberDraggableScroller(
-//            itemsAvailable = itemsAvailable,
-//        ),
-//    )
 }
