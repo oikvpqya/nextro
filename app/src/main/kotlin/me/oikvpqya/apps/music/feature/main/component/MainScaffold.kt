@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -32,15 +31,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
-import androidx.compose.ui.util.fastFirst
+import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.util.fastMap
+import androidx.compose.ui.util.fastMaxOfOrNull
 import kotlinx.coroutines.launch
 import me.oikvpqya.apps.music.ui.util.BOTTOM_BAR_CONTAINER_HEIGHT
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_CONTAINER_HEIGHT
@@ -52,12 +51,6 @@ enum class BottomSheetDragValue {
 }
 
 private val FAB_PADDING = 16.dp
-
-private const val ContentLayoutIdTag = "content"
-private const val BottomBarLayoutIdTag = "bottomBar"
-private const val BottomSheetLayoutIdTag = "bottomSheet"
-private const val FabLayoutIdTag = "fab"
-private const val SnackbarLayoutIdTag = "snackbar"
 
 @OptIn(
     ExperimentalFoundationApi::class,
@@ -159,72 +152,67 @@ fun MainScaffold(
         }
     }
 
+    BackHandler(bottomSheetValue == BottomSheetDragValue.EXPANDED) {
+        coroutineScope.launch {
+            anchoredDraggableState.animateTo(BottomSheetDragValue.COLLAPSED)
+        }
+    }
+
     Layout(
         modifier = modifier,
-        content = {
-            Surface(
-                modifier = Modifier
-                    .alpha((1f - (progress * 4).coerceAtMost(1f)) * bottomBarAlphaProgress)
-                    .layoutId(BottomBarLayoutIdTag),
-                contentColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 3.dp
-            ) { bottomBar() }
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-//                    .clip(
-//                        RoundedCornerShape(
-//                            topStart = 24.dp * (1f - progress),
-//                            topEnd = 24.dp * (1f - progress)
-//                        )
-//                    )
-                    .anchoredDraggable(
-                        state = anchoredDraggableState,
-                        orientation = Orientation.Vertical,
-                    )
-                    .layoutId(BottomSheetLayoutIdTag),
-                contentColor = MaterialTheme.colorScheme.surface,
-                tonalElevation = 1.dp,
-            ) {
-                if (progress != 1f) {
-                    Box(
-                        modifier = Modifier
-                            .alpha(1f - (progress * 4).coerceIn(0f..1f))
-                            .pointerInput(Unit) {
-                                if (progress == 0f) {
-                                    detectTapGestures {
-                                        coroutineScope.launch {
-                                            anchoredDraggableState.animateTo(BottomSheetDragValue.EXPANDED)
+        contents = listOf<@Composable () -> Unit>(
+            {
+                val alpha = (1f - (progress * 4).coerceAtMost(1f)) * bottomBarAlphaProgress
+                Surface(
+                    modifier = Modifier.alpha(alpha),
+                    contentColor = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 3.dp
+                ) { bottomBar() }
+            },
+            {
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .anchoredDraggable(
+                            state = anchoredDraggableState,
+                            orientation = Orientation.Vertical,
+                        ),
+                    contentColor = MaterialTheme.colorScheme.surface,
+                    tonalElevation = 1.dp,
+                ) {
+                    if (progress != 1f) {
+                        val alpha = 1f - (progress * 4).coerceIn(0f..1f)
+                        Box(
+                            modifier = Modifier
+                                .alpha(alpha)
+                                .pointerInput(Unit) {
+                                    if (progress == 0f) {
+                                        detectTapGestures {
+                                            coroutineScope.launch {
+                                                anchoredDraggableState.animateTo(
+                                                    BottomSheetDragValue.EXPANDED
+                                                )
+                                            }
                                         }
                                     }
                                 }
-                            }
-                    ) { collapsedBottomSheet() }
+                        ) { collapsedBottomSheet() }
+                    }
+                    if (progress != 0f) {
+                        val alpha = ((progress - 0.25f) * 4).coerceIn(0f..1f)
+                        Box(
+                            modifier = Modifier.alpha(alpha)
+                        ) { expandedBottomSheet() }
+                    }
                 }
-                if (progress != 0f) {
-                    Box(
-                        modifier = Modifier.alpha(((progress - 0.25f) * 4).coerceIn(0f..1f))
-                    ) { expandedBottomSheet() }
-                }
-            }
-            Box(
-                modifier = Modifier.layoutId(FabLayoutIdTag)
-            ) { fab() }
-            Box(
-                modifier = Modifier.layoutId(SnackbarLayoutIdTag)
-            ) { snackbar() }
-            Box(
-                modifier = Modifier
-//                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .layoutId(ContentLayoutIdTag)
-            ) { content() }
-            BackHandler(bottomSheetValue == BottomSheetDragValue.EXPANDED) {
-                coroutineScope.launch {
-                    anchoredDraggableState.animateTo(BottomSheetDragValue.COLLAPSED)
-                }
-            }
-        }
-    ) { measurables, constraints ->
+            },
+            fab,
+            snackbar,
+            content,
+        )
+    ) { (bottomBarMeasurables, bottomSheetMeasurables, fabMeasurables, snackbarMeasurables,
+                      contentMeasurables),
+        constraints ->
         val looseConstraints = constraints.copy(minWidth = 0, minHeight = 0)
         val layoutWidth = constraints.maxWidth
         val layoutHeight = constraints.maxHeight
@@ -232,10 +220,8 @@ fun MainScaffold(
         val systemBarOffsetFromLeft = contentWindowInsets.getLeft(this, layoutDirection)
         val systemBarOffsetFromRight = contentWindowInsets.getRight(this, layoutDirection)
 
-        val bottomBarPlaceable = measurables
-            .fastFirst { it.layoutId == BottomBarLayoutIdTag }
-            .measure(looseConstraints)
-        val bottomBarHeight = bottomBarPlaceable.height
+        val bottomBarPlaceable = bottomBarMeasurables.fastMap { it.measure(looseConstraints) }
+        val bottomBarHeight = bottomBarPlaceable.fastMaxOfOrNull { it.height } ?: 0
         val bottomBarOffsetFromBottom = (bottomBarHeight * bottomBarOffsetProgress + scrollBehavior.state.heightOffset).roundToInt()
 
         val bottomSheetHeight = LIST_TRACK_CONTAINER_HEIGHT.roundToPx()
@@ -248,9 +234,8 @@ fun MainScaffold(
             }
         )
 
-        val bottomSheetPlaceable = measurables
-            .fastFirst { it.layoutId == BottomSheetLayoutIdTag }
-            .measure(
+        val bottomSheetPlaceable = bottomSheetMeasurables.fastMap {
+            it.measure(
                 looseConstraints
                     .offset(
                         horizontal = -(systemBarOffsetFromLeft + systemBarOffsetFromRight)
@@ -259,71 +244,88 @@ fun MainScaffold(
                         maxHeight = if (progress == 0f) bottomSheetOffsetFromBottom else layoutHeight
                     )
             )
-        val fabPlaceable = measurables
-            .fastFirst { it.layoutId == FabLayoutIdTag }
-            .measure(
+        }
+
+        val fabPlaceable = fabMeasurables.fastMap {
+            it.measure(
                 looseConstraints.offset(
                     horizontal = -(systemBarOffsetFromLeft + systemBarOffsetFromRight)
                 )
             )
-        val snackbarPlaceable = measurables
-            .fastFirst { it.layoutId == SnackbarLayoutIdTag }
-            .measure(
+        }
+        val fabPaddingOffset = FAB_PADDING.roundToPx()
+        val fabWidth = fabPlaceable.fastMaxOfOrNull { it.width } ?: 0
+        val fabHeight = fabPlaceable.fastMaxOfOrNull { it.height + fabPaddingOffset } ?: 0
+        val fabOffsetFromBottom = bottomSheetOffsetFromBottom + fabHeight
+
+        val snackbarPlaceable = snackbarMeasurables.fastMap {
+            it.measure(
                 looseConstraints.offset(
                     horizontal = -(systemBarOffsetFromLeft + systemBarOffsetFromRight)
                 )
             )
+        }
+        val snackbarWidth = snackbarPlaceable.fastMaxOfOrNull { it.width } ?: 0
+        val snackbarHeight = snackbarPlaceable.fastMaxOfOrNull { it.height } ?: 0
+        val snackbarOffsetFromBottom = fabOffsetFromBottom + snackbarHeight
 
         val contentHeight = layoutHeight - bottomSheetOffsetFromBottom
 //        val contentHeight = layoutHeight - if (isCollapsingBottomBar) systemBarOffsetFromBottom else bottomBarOffsetFromBottom
-        val contentPlaceable = measurables
-            .fastFirst { it.layoutId == ContentLayoutIdTag }
-            .measure(
+        val contentPlaceable = contentMeasurables.fastMap {
+            it.measure(
                 constraints.copy(
                     minHeight = contentHeight,
                     maxHeight = contentHeight
                 )
             )
+        }
 
         layout(
             width = layoutWidth,
             height = layoutHeight
         ) {
-            val fabPaddingOffset = FAB_PADDING.roundToPx()
-            val fabHeight = if (fabPlaceable.height != 0) { fabPlaceable.height + fabPaddingOffset } else { 0 }
-            val fabOffsetFromBottom = bottomSheetOffsetFromBottom + fabHeight
-            val snackbarHeight = snackbarPlaceable.height
-            val snackbarOffsetFromBottom = fabOffsetFromBottom + snackbarHeight
-            contentPlaceable.placeRelative(
-                x = 0,
-                y = 0
-            )
-            fabPlaceable.placeRelative(
-                x = if (layoutDirection == LayoutDirection.Ltr) {
-                    layoutWidth - (fabPaddingOffset + fabPlaceable.width)
-                } else { fabPaddingOffset },
-                y = layoutHeight - fabOffsetFromBottom
-            )
-            bottomSheetPlaceable.placeRelative(
-                x = 0,
-                y = bottomSheetOffset
-            )
+            contentPlaceable.fastForEach {
+                it.placeRelative(
+                    x = 0,
+                    y = 0
+                )
+            }
+            fabPlaceable.fastForEach {
+                it.placeRelative(
+                    x = if (layoutDirection == LayoutDirection.Ltr) {
+                        layoutWidth - (fabPaddingOffset + fabWidth)
+                    } else {
+                        fabPaddingOffset
+                    },
+                    y = layoutHeight - fabOffsetFromBottom
+                )
+            }
+            bottomSheetPlaceable.fastForEach {
+                it.placeRelative(
+                    x = 0,
+                    y = bottomSheetOffset
+                )
+            }
             val transitionRatio = (bottomSheetOffset.toFloat() / bottomSheetTrack)
                 .pow(2)
                 .coerceIn(0f..1f)
             val bottomBarTransitionOffset = (bottomBarOffsetFromBottom * transitionRatio)
                 .roundToInt()
-            bottomBarPlaceable.placeRelative(
-                x = 0,
-                y = layoutHeight - bottomBarTransitionOffset
-            )
+            bottomBarPlaceable.fastForEach {
+                it.placeRelative(
+                    x = 0,
+                    y = layoutHeight - bottomBarTransitionOffset
+                )
+            }
             val snackbarTransitionOffset = (snackbarOffsetFromBottom * transitionRatio)
                 .roundToInt()
                 .coerceAtLeast(systemBarOffsetFromBottom + snackbarHeight)
-            snackbarPlaceable.placeRelative(
-                x = (layoutWidth - snackbarPlaceable.width) / 2 + systemBarOffsetFromLeft,
-                y = layoutHeight - snackbarTransitionOffset
-            )
+            snackbarPlaceable.fastForEach {
+                it.placeRelative(
+                    x = (layoutWidth - snackbarWidth) / 2 + systemBarOffsetFromLeft,
+                    y = layoutHeight - snackbarTransitionOffset
+                )
+            }
         }
     }
 }
