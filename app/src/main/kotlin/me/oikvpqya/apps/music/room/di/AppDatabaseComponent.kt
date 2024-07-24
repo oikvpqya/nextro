@@ -73,10 +73,18 @@ interface AppDatabaseComponent {
 
     @ApplicationScope
     @Provides
-    fun providePlaylistDao(
+    fun providePlaylistNameDao(
         db: AppDatabase
-    ): PlaylistDao {
-        return db.playlistDao()
+    ): PlaylistNameDao {
+        return db.playlistNameDao()
+    }
+
+    @ApplicationScope
+    @Provides
+    fun providePlaylistSongDao(
+        db: AppDatabase
+    ): PlaylistSongDao {
+        return db.playlistSongDao()
     }
 
     @ApplicationScope
@@ -85,5 +93,13 @@ interface AppDatabaseComponent {
         db: AppDatabase
     ): QueueDao {
         return db.queueDao()
+    }
+
+    @ApplicationScope
+    @Provides
+    fun provideSongDao(
+        db: AppDatabase
+    ): SongDao {
+        return db.songDao()
     }
 }

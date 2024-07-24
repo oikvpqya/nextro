@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import me.oikvpqya.apps.music.data.MediaSynchronizer
 import me.oikvpqya.apps.music.feature.AppDestination
 import me.oikvpqya.apps.music.feature.RootRouteFactory
 import me.oikvpqya.apps.music.feature.permission.PermissionRoute
@@ -41,6 +42,7 @@ interface AppContent {
 
 @Inject
 class AppContentImpl(
+    private val mediaSynchronizer: Lazy<MediaSynchronizer>,
     private val mediaController: Lazy<AppMediaController>,
     private val rootRouteFactories: Set<RootRouteFactory>,
 ) : AppContent {
@@ -69,6 +71,7 @@ class AppContentImpl(
                         AppRootRoute(
                             modifier = Modifier.fillMaxSize(),
                             mediaController = mediaController.value,
+                            mediaSynchronizer = mediaSynchronizer.value,
                             factories = rootRouteFactories,
                         )
                     } else {
@@ -86,9 +89,11 @@ class AppContentImpl(
 @Composable
 fun AppRootRoute(
     mediaController: AppMediaController,
+    mediaSynchronizer: MediaSynchronizer,
     factories: Set<RouteFactory>,
     modifier: Modifier = Modifier,
 ) {
+    mediaSynchronizer.startSync()
     CompositionLocalProvider(
         LocalMediaHandlerState provides mediaController.mediaHandlerFlow.collectAsStateWithLifecycle(
             initialValue = null,

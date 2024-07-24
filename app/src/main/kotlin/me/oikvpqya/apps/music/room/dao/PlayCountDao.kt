@@ -1,16 +1,28 @@
 package me.oikvpqya.apps.music.room.dao
 
 import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import me.oikvpqya.apps.music.model.Library
-import me.oikvpqya.apps.music.model.Tag
 
 @Dao
 interface PlayCountDao {
+
+    @Entity(
+        tableName = "play_count",
+    )
+    data class PlayCountEntity(
+        @PrimaryKey
+        val mediaId: String,
+        val count: Long,
+    )
+
     @Query(
         value = """
-        SELECT tag, count FROM play_count
+        SELECT song.tag, play_count.count FROM song, play_count
+        WHERE song.mediaId = play_count.mediaId
         ORDER BY count DESC
     """
     )
@@ -19,11 +31,11 @@ interface PlayCountDao {
     @Query(
         value = """
         INSERT INTO play_count
-        VALUES (:mediaId, 1, :tag)
-        ON CONFLICT (mediaId) DO UPDATE SET count = count + 1
+        VALUES (:mediaId, 1)
+        ON CONFLICT (play_count.mediaId) DO UPDATE SET count = play_count.count + 1
     """
     )
-    suspend fun insert(mediaId: Long, tag: Tag.Song)
+    suspend fun upsert(mediaId: Long)
 
     @Query(
         value = """

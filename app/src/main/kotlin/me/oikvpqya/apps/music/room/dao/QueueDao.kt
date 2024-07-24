@@ -1,31 +1,43 @@
 package me.oikvpqya.apps.music.room.dao
 
 import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import me.oikvpqya.apps.music.model.Library
-import me.oikvpqya.apps.music.model.Tag
 
 @Dao
 interface QueueDao {
+
+    @Entity(
+        tableName = "queue",
+    )
+    data class QueueEntity(
+        val mediaId: String,
+        @PrimaryKey(autoGenerate = true)
+        val id: Long = 0L
+    )
+
     @Query(
         value = """
-        SELECT tag FROM song_with_id;
+        SELECT song.tag FROM song, queue
+        WHERE song.mediaId = queue.mediaId
     """
     )
     fun getAll(): Flow<List<Library.Song.Default>>
 
     @Query(
         value = """
-        INSERT INTO song_with_id (mediaId, tag)
-        VALUES (:mediaId, :tag)
+        INSERT INTO queue (mediaId)
+        VALUES (:mediaId)
     """
     )
-    suspend fun insert(mediaId: Long, tag: Tag.Song)
+    suspend fun insert(mediaId: Long)
 
     @Query(
         value = """
-        DELETE FROM song_with_id
+        DELETE FROM queue
     """
     )
     suspend fun deleteAll()

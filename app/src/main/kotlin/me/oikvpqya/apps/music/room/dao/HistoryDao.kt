@@ -1,16 +1,29 @@
 package me.oikvpqya.apps.music.room.dao
 
 import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 import me.oikvpqya.apps.music.model.Library
-import me.oikvpqya.apps.music.model.Tag
 
 @Dao
 interface HistoryDao {
+
+    @Entity(
+        tableName = "history",
+    )
+    data class HistoryEntity(
+        val timestamp: Long,
+        val mediaId: String,
+        @PrimaryKey(autoGenerate = true)
+        val id: Long = 0L,
+    )
+
     @Query(
         value = """
-        SELECT tag, timestamp FROM history
+        SELECT song.tag, history.timestamp FROM song, history
+        WHERE song.mediaId = history.mediaId
         ORDER BY timestamp DESC
     """
     )
@@ -18,21 +31,22 @@ interface HistoryDao {
 
     @Query(
         value = """
-        SELECT tag, timestamp FROM (
-            SELECT DISTINCT mediaId, tag, timestamp FROM history
-        )
-        ORDER BY timestamp DESC
+        SELECT song.tag, distinct_history.timestamp FROM song, (
+            SELECT DISTINCT history.mediaId, history.timestamp FROM history
+        ) AS distinct_history
+        WHERE song.mediaId = distinct_history.mediaId
+        ORDER BY distinct_history.timestamp DESC
     """
     )
     fun getAllDistinctly(): Flow<List<Library.Song.History>>
 
     @Query(
         value = """
-        INSERT INTO history (timestamp, mediaId, tag)
-        VALUES (:timestamp, :mediaId, :tag)
+        INSERT INTO history (timestamp, mediaId)
+        VALUES (:timestamp, :mediaId)
     """
     )
-    suspend fun insert(timestamp: Long, mediaId: Long, tag: Tag.Song)
+    suspend fun insert(timestamp: Long, mediaId: Long)
 
     @Query(
         value = """

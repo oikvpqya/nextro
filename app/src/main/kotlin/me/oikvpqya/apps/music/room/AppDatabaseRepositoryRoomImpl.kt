@@ -23,16 +23,19 @@ class AppDatabaseRepositoryRoomImpl(
     private val favoriteDao: FavoriteDao,
     private val historyDao: HistoryDao,
     private val playCountDao: PlayCountDao,
-    private val playlistDao: PlaylistDao,
-    private val queueDao: QueueDao
+    private val playlistNameDao: PlaylistNameDao,
+    private val playlistSongDao: PlaylistSongDao,
+    private val queueDao: QueueDao,
+    private val songDao: SongDao,
 ) : AppDatabaseRepository {
+
     override val favoriteFlow: Flow<List<Library.Song.Default>>
         get() = favoriteDao.getAll()
     override val historyFlow: Flow<List<Library.Song.History>>
         get() = historyDao.getAll()
     override val playlistsFlow: Flow<List<Libraries.Playlist>>
-        get() = playlistDao.getAllNames().map { entity ->
-            entity.map { (name, _) ->
+        get() = playlistNameDao.getAll().map { entity ->
+            entity.map { name ->
                 // TODO
                 Libraries.Playlist(
                     tag = Tag.Default(name = name, albumId = -1L),
@@ -76,7 +79,7 @@ class AppDatabaseRepositoryRoomImpl(
         get() = playCountDao.getAll()
 
     override suspend fun createPlaylist(name: String) {
-        playlistDao.insertName(name)
+        playlistNameDao.insert(name)
     }
 
     override suspend fun setFavorite(songs: List<MediaItem>) {
@@ -89,7 +92,7 @@ class AppDatabaseRepositoryRoomImpl(
                             if (getOneShot(tag.mediaId) != null) {
                                 delete(tag.mediaId)
                             } else {
-                                insert(tag.mediaId, tag)
+                                upsert(tag.mediaId)
                             }
                         }
                     }
@@ -109,7 +112,7 @@ class AppDatabaseRepositoryRoomImpl(
                     queueDao.deleteAll()
                     songs.forEach {
                         val tag = it.asTag()
-                        queueDao.insert(tag.mediaId, tag)
+                        queueDao.insert(tag.mediaId)
                     }
                 }
             }
@@ -120,13 +123,13 @@ class AppDatabaseRepositoryRoomImpl(
 
     override suspend fun setHistory(songs: List<MediaItem>) {
         with(appDatabase) {
-            useWriterConnection {
-                it.immediateTransaction {
+            useWriterConnection { transactor ->
+                transactor.immediateTransaction {
                     val epochMilliseconds = Clock.System.now().toEpochMilliseconds()
                     songs.forEach {
                         val tag = it.asTag()
-                        historyDao.insert(epochMilliseconds, tag.mediaId, tag)
-                        playCountDao.insert(tag.mediaId, tag)
+                        historyDao.insert(epochMilliseconds, tag.mediaId)
+                        playCountDao.upsert(tag.mediaId)
                     }
                 }
             }
@@ -139,17 +142,25 @@ class AppDatabaseRepositoryRoomImpl(
         val mediaId = song.asTag().mediaId
         return favoriteDao.get(mediaId).map { it != null }
     }
+
+    override suspend fun upsertSongs(songs: List<Library.Song>) {
+        with(appDatabase) {
+            useWriterConnection { transactor ->
+                transactor.immediateTransaction {
+                    songs.forEach { song ->
+                        val tag = song.tag
+                        songDao.upsert(tag.mediaId, tag)
+                    }
+                }
+            }
+            // Manually triggers invalidation
+            invalidationTracker.refreshAsync()
+        }
+    }
 }
 
 @Inject
-class AppDatabaseRepositoryRoomFake(
-    private val appDatabase: AppDatabase,
-    private val favoriteDao: FavoriteDao,
-    private val historyDao: HistoryDao,
-    private val playCountDao: PlayCountDao,
-    private val playlistDao: PlaylistDao,
-    private val queueDao: QueueDao
-) : AppDatabaseRepository {
+class AppDatabaseRepositoryRoomFake : AppDatabaseRepository {
     override val favoriteFlow: Flow<List<Library.Song.Default>>
         get() = flow {  }
     override val historyFlow: Flow<List<Library.Song>>
@@ -178,6 +189,9 @@ class AppDatabaseRepositoryRoomFake(
     }
 
     override suspend fun setHistory(songs: List<MediaItem>) {
+    }
+
+    override suspend fun upsertSongs(songs: List<Library.Song>) {
     }
 
     override fun isFavoriteFlow(song: MediaItem): Flow<Boolean> = flow {  }

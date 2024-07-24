@@ -17,7 +17,8 @@ annotation class ApplicationScope
 @ApplicationScope
 abstract class ApplicationComponent(
     @get:Provides val context: Context,
-) : CoilComponent,
+) : ApplicationCoroutineScopeComponent,
+    CoilComponent,
     AppMediaStoreComponent,
     AppDatabaseComponent,
     PreferenceComponent,

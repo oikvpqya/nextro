@@ -7,28 +7,24 @@ import me.oikvpqya.apps.music.room.dao.BlacklistDao
 import me.oikvpqya.apps.music.room.dao.FavoriteDao
 import me.oikvpqya.apps.music.room.dao.HistoryDao
 import me.oikvpqya.apps.music.room.dao.PlayCountDao
-import me.oikvpqya.apps.music.room.dao.PlaylistDao
+import me.oikvpqya.apps.music.room.dao.PlaylistNameDao
+import me.oikvpqya.apps.music.room.dao.PlaylistSongDao
 import me.oikvpqya.apps.music.room.dao.QueueDao
-import me.oikvpqya.apps.music.room.model.BlacklistEntity
-import me.oikvpqya.apps.music.room.model.HistoryEntity
-import me.oikvpqya.apps.music.room.model.PlayCountEntity
-import me.oikvpqya.apps.music.room.model.PlaylistNameEntity
-import me.oikvpqya.apps.music.room.model.PlaylistSongEntity
-import me.oikvpqya.apps.music.room.model.SongEntity
-import me.oikvpqya.apps.music.room.model.SongWithIdEntity
+import me.oikvpqya.apps.music.room.dao.SongDao
 
 @Database(
     entities = [
-        BlacklistEntity::class,
-        HistoryEntity::class,
-        PlayCountEntity::class,
-        PlaylistNameEntity::class,
-        PlaylistSongEntity::class,
-        SongEntity::class,
-        SongWithIdEntity::class
+        BlacklistDao.BlacklistEntity::class,
+        HistoryDao.HistoryEntity::class,
+        PlayCountDao.PlayCountEntity::class,
+        PlaylistNameDao.PlaylistNameEntity::class,
+        PlaylistSongDao.PlaylistSongEntity::class,
+        SongDao.SongEntity::class,
+        QueueDao.QueueEntity::class,
+        FavoriteDao.FavoriteEntity::class,
     ],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 @TypeConverters(value = [AppTypeConverter::class])
 abstract class AppDatabase : RoomDatabase() {
@@ -36,6 +32,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteDao(): FavoriteDao
     abstract fun historyDao(): HistoryDao
     abstract fun playCountDao(): PlayCountDao
-    abstract fun playlistDao(): PlaylistDao
+    abstract fun playlistNameDao(): PlaylistNameDao
+    abstract fun playlistSongDao(): PlaylistSongDao
     abstract fun queueDao(): QueueDao
+    abstract fun songDao(): SongDao
 }

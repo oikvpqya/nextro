@@ -19,6 +19,7 @@ interface AppDatabaseRepository {
     suspend fun deleteFavorite(songs: List<MediaItem>)
     suspend fun setQueues(songs: List<MediaItem>)
     suspend fun setHistory(songs: List<MediaItem>)
+    suspend fun upsertSongs(songs: List<Library.Song>)
 
     fun isFavoriteFlow(song: MediaItem): Flow<Boolean>
 }
