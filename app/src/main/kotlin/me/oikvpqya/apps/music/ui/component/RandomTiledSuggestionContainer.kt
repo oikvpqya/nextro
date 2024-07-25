@@ -1,13 +1,23 @@
 package me.oikvpqya.apps.music.ui.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
@@ -19,7 +29,7 @@ import kotlin.random.Random
 fun RandomTiledLibraryContainer(
     items: List<Library.Song>,
     onItemClick: (List<Library.Song>, Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     RandomTile(
         items = if (items.size != 8) {
@@ -38,7 +48,7 @@ fun RandomTiledLibraryContainer(
             val index = items.indexOfFirst { mediaId == it.tag.mediaId }.coerceAtLeast(0)
             onItemClick(items, index)
         },
-        modifier = modifier
+        modifier = modifier.padding(8.dp)
     )
 }
 
@@ -119,14 +129,15 @@ private fun LargeContainer(
             val uri0 = items[0]?.getArtworkUri()
             if (uri0 != null) {
                 ImageContainerSample(
-                    modifier = Modifier.clickable {
+                    data = uri0,
+                    size = width,
+                    onClickEnable = true,
+                    onClick = {
                         val mediaId = items[0]?.tag?.mediaId
                         if (mediaId != null) {
                             onItemClick(mediaId)
                         }
                     },
-                    data = uri0,
-                    size = width
                 )
             } else {
                 ImageContainerSample(
@@ -136,14 +147,15 @@ private fun LargeContainer(
             val uri1 = items[1]?.getArtworkUri()
             if (uri1 != null) {
                 ImageContainerSample(
-                    modifier = Modifier.clickable {
+                    data = uri1,
+                    size = width,
+                    onClickEnable = true,
+                    onClick = {
                         val mediaId = items[1]?.tag?.mediaId
                         if (mediaId != null) {
                             onItemClick(mediaId)
                         }
-                    },
-                    data = uri1,
-                    size = width
+                    }
                 )
             } else {
                 ImageContainerSample(
@@ -159,14 +171,15 @@ private fun LargeContainer(
             val uri = items[2]?.getArtworkUri()
             if (uri != null) {
                 ImageContainerSample(
-                    modifier = Modifier.clickable {
+                    data = uri,
+                    size = width * 2 + padding,
+                    onClickEnable = true,
+                    onClick = {
                         val mediaId = items[2]?.tag?.mediaId
                         if (mediaId != null) {
                             onItemClick(mediaId)
                         }
                     },
-                    data = uri,
-                    size = width * 2 + padding
                 )
             } else {
                 ImageContainerSample(
@@ -174,9 +187,12 @@ private fun LargeContainer(
                 )
             }
         } else {
-            ImageContainerSample(
-                size = width * 2 + padding
-            )
+            SuggestionCard(
+                onClick = {},
+                modifier = Modifier.size(width * 2 + padding),
+            ) {
+                SuggestionMessage()
+            }
         }
     }
 
@@ -212,14 +228,15 @@ private fun SmallContainer(
         val uri2 = items[2]?.getArtworkUri()
         if (uri0 != null) {
             ImageContainerSample(
-                modifier = Modifier.clickable {
+                data = uri0,
+                size = width,
+                onClickEnable = true,
+                onClick = {
                     val mediaId = items[0]?.tag?.mediaId
                     if (mediaId != null) {
                         onItemClick(mediaId)
                     }
-                },
-                data = uri0,
-                size = width
+                }
             )
         } else {
             ImageContainerSample(
@@ -228,14 +245,15 @@ private fun SmallContainer(
         }
         if (uri1 != null) {
             ImageContainerSample(
-                modifier = Modifier.clickable {
+                data = uri1,
+                size = width,
+                onClickEnable = true,
+                onClick = {
                     val mediaId = items[1]?.tag?.mediaId
                     if (mediaId != null) {
                         onItemClick(mediaId)
                     }
-                },
-                data = uri1,
-                size = width
+                }
             )
         } else {
             ImageContainerSample(
@@ -244,19 +262,74 @@ private fun SmallContainer(
         }
         if (uri2 != null) {
             ImageContainerSample(
-                modifier = Modifier.clickable {
+                data = uri2,
+                size = width,
+                onClickEnable = true,
+                onClick = {
                     val mediaId = items[2]?.tag?.mediaId
                     if (mediaId != null) {
                         onItemClick(mediaId)
                     }
-                },
-                data = uri2,
-                size = width
+                }
             )
         } else {
             ImageContainerSample(
                 size = width
             )
         }
+    }
+}
+
+
+@Composable
+fun SuggestionMessage(
+    modifier: Modifier = Modifier,
+) {
+    val textStyle = MaterialTheme.typography.headlineLarge
+        .copy(
+            lineBreak = LineBreak.Heading
+        )
+    Text(
+        modifier = modifier.fillMaxSize().padding(8.dp),
+        text = "New Music Mix",
+        style = textStyle,
+    )
+}
+
+@Composable
+fun SuggestionCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable (ColumnScope.() -> Unit),
+) {
+    Surface(
+        modifier = modifier,
+    ) {
+        Card(
+            modifier = Modifier.layout { measurable, constraints ->
+                val placeable = measurable.measure(constraints)
+                val width = placeable.width
+                val height = placeable.height
+                val size = maxOf(width, height)
+                layout(size, size) {
+                    val x = (size - placeable.width) / 2
+                    val y = (size - placeable.height) / 2
+                    placeable.placeRelative(x, y)
+                }
+            },
+            onClick = onClick,
+            content = content,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SuggestionMessagePreview() {
+    SuggestionCard(
+        onClick = {},
+        modifier = Modifier.size(150.dp)
+    ) {
+        SuggestionMessage()
     }
 }
