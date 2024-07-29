@@ -30,12 +30,18 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: Build with Gradle
-        run: ./gradlew assemble --no-daemon -PsignAsDebug
+        run: ./gradlew assemble --no-daemon
 
-      - name: Upload APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: Generated APK
+          name: debug-apk
           path:  |
-            androidApp/build/outputs/apk/**/*.apk
-            composeApp/build/outputs/apk/**/*.apk
+            app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-apk
+          path:  |
+            app/build/outputs/apk/release/app-release.apk
