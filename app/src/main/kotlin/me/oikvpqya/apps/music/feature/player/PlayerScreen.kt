@@ -30,6 +30,9 @@ val CAROUSEL_DEFAULT_MIN_WIDTH = CAROUSEL_MIN_WIDTH.start
 val ARTWORK_PADDING = 16.dp
 const val DISPLAY_NEXT_MAX_COUNT = 0
 
+@Deprecated(
+    message = "unused"
+)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerScreen(
@@ -49,8 +52,11 @@ fun PlayerScreen(
     }
 }
 
+@Deprecated(
+    message = "unused"
+)
 @Composable
-fun MainContent(
+private fun MainContent(
     modifier: Modifier = Modifier
 ) {
     val mediaInfo by LocalMediaInfoState.current
@@ -67,7 +73,7 @@ fun MainContent(
     val mediaHandler by LocalMediaHandlerState.current
     val savedSong = if (queueIndex >= 0 && queue.size > queueIndex) queue[queueIndex] else null
     BoxWithConstraints(
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
 //            .scrollable(
 //                state = pagerState,
 //                orientation = Orientation.Horizontal,
@@ -78,16 +84,19 @@ fun MainContent(
 //            )
     ) {
         val itemSize = maxWidth - (ARTWORK_PADDING + CAROUSEL_DEFAULT_MIN_WIDTH) * DISPLAY_NEXT_MAX_COUNT * 2
+        ArtworkCarouselContainer(
+            itemSize = itemSize,
+            pagerState = pagerState,
+            flingBehavior = flingBehavior
+        )
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+//                .fillMaxSize(),
+                    ,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceEvenly
+//            verticalArrangement = Arrangement.SpaceEvenly,
         ) {
-            ArtworkCarouselContainer(
-                itemSize = itemSize,
-                pagerState = pagerState,
-                flingBehavior = flingBehavior
-            )
             TitleContainer(
                 modifier = Modifier
                     .padding(horizontal = 16.dp),

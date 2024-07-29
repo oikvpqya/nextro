@@ -84,9 +84,17 @@ class HomeRouteFactory(
         navigation<MainDestination.Home>(
             startDestination = MainDestination.Home.startDestination,
         ) {
-            composable<HomeDestination.Home> { _ ->
+            composable<HomeDestination.Suggestions> { _ ->
                 val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }
-                HomeRoute(navController, viewModel, modifier)
+                SuggestionsRoute(navController, viewModel, modifier)
+            }
+            composable<HomeDestination.TopPlaying> { _ ->
+                val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }
+                TopPlayingRoute(navController, viewModel, modifier)
+            }
+            composable<HomeDestination.Histories> { _ ->
+                val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }
+                HistoriesRoute(navController, viewModel, modifier)
             }
             composable<HomeDestination.AlbumDetail> { _ ->
                 val viewModel = viewModel { viewModelFactory(createSavedStateHandle()) }

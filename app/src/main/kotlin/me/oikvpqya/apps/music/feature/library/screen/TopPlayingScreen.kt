@@ -1,11 +1,7 @@
 package me.oikvpqya.apps.music.feature.library.screen
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,96 +13,22 @@ import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.ui.component.ColumnLibrariesContainer
 import me.oikvpqya.apps.music.ui.component.ColumnLibraryContainer
 import me.oikvpqya.apps.music.ui.component.HeaderContainer
-import me.oikvpqya.apps.music.ui.component.RandomTiledLibraryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 
-@Deprecated(
-    message = "unused"
-)
 @Composable
-fun HomeScreen(
-    favoriteSongs: ImmutableList<Library.Song>,
-    historySongs: ImmutableList<Library.Song>,
-    suggestionSongs: ImmutableList<Library.Song>,
+fun TopPlayingScreen(
     topAlbums: ImmutableList<Libraries.Album>,
     topArtists: ImmutableList<Libraries.Default>,
     topSongs: ImmutableList<Library.Song>,
+    onLibrariesClick: (Libraries) -> Unit,
     modifier: Modifier = Modifier,
-    onLibrariesClick: (Libraries) -> Unit
-) {
-    val scrollableState = rememberLazyListState()
-
-    Box(
-        modifier = modifier.fillMaxSize()
-    ) {
-        MainContent(
-            favoriteSongs = favoriteSongs,
-            historySongs = historySongs,
-            suggestionSongs = suggestionSongs,
-            topSongs = topSongs,
-            topArtists = topArtists,
-            topAlbums = topAlbums,
-            scrollableState = scrollableState,
-            onLibrariesClick = onLibrariesClick
-        )
-    }
-}
-
-@Deprecated(
-    message = "unused"
-)
-@Composable
-private fun BoxScope.MainContent(
-    favoriteSongs: ImmutableList<Library.Song>,
-    historySongs: ImmutableList<Library.Song>,
-    suggestionSongs: ImmutableList<Library.Song>,
-    topAlbums: ImmutableList<Libraries.Album>,
-    topArtists: ImmutableList<Libraries.Default>,
-    topSongs: ImmutableList<Library.Song>,
-    scrollableState: LazyListState,
-    onLibrariesClick: (Libraries) -> Unit
 ) {
     val mediaHandler by LocalMediaHandlerState.current
+    val scrollableState = rememberLazyListState()
     LazyColumn(
-        modifier = Modifier,
+        modifier = modifier,
         state = scrollableState
     ) {
-        homeLibraryContainer(
-            title = "History",
-            items = historySongs,
-            onHeaderClick = {},
-            onItemClick = { index ->
-                mediaHandler?.playSongs(historySongs, index)
-            },
-            onMoreClick = {}
-        )
-        item {
-            HeaderContainer(
-                titleContainer = { TitleContainer("Mix") },
-                widgetContainer = {
-//                    ImageContainerSample()
-                }
-            ) {}
-        }
-        item {
-            if (suggestionSongs.size == 8) {
-                RandomTiledLibraryContainer(
-                    items = suggestionSongs,
-                    onItemClick = { items, index  ->
-                        mediaHandler?.playSongs(items, index)
-                    }
-                )
-            }
-        }
-        homeLibraryContainer(
-            title = "Favorite",
-            items = favoriteSongs,
-            onHeaderClick = {},
-            onItemClick = { index ->
-                mediaHandler?.playSongs(favoriteSongs, index)
-            },
-            onMoreClick = {}
-        )
         homeLibraryContainer(
             title = "Top Songs",
             items = topSongs,
@@ -188,3 +110,4 @@ private fun LazyListScope.homeLibrariesContainer(
         )
     }
 }
+

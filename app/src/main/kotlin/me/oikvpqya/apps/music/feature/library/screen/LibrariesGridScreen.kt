@@ -16,12 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.oikvpqya.compose.fastscroller.rememberScrollbarAdapter
 import kotlinx.collections.immutable.ImmutableList
 import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.ui.component.ChannelContainer
-import me.oikvpqya.apps.music.ui.component.FastScrollerScrollbar
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 import me.oikvpqya.apps.music.ui.component.fake.ImageMaxContainerSample
@@ -41,10 +39,6 @@ fun LibrariesGridScreen(
             scrollableState = scrollableState,
             libraries = libraries,
             onItemClick = onItemClick
-        )
-        FastScrollerScrollbar(
-            modifier = Modifier.align(Alignment.TopEnd).fillMaxHeight(),
-            adapter = rememberScrollbarAdapter(scrollableState),
         )
     }
 }

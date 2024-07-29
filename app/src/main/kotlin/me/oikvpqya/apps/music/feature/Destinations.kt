@@ -41,7 +41,7 @@ val MainDestination.startDestination: Destination
     get() = when (this) {
         MainDestination.Albums -> AlbumsDestination.Albums
         MainDestination.Artists -> ArtistsDestination.Artists
-        MainDestination.Home -> HomeDestination.Home
+        MainDestination.Home -> HomeDestination.Suggestions
         MainDestination.Playlists -> PlaylistsDestination.Playlists
         MainDestination.Songs -> SongsDestination.Songs
     }
@@ -109,7 +109,11 @@ sealed interface ArtistsDestination : Destination {
 sealed interface HomeDestination : Destination {
 
     @Serializable
-    data object Home : HomeDestination
+    data object Suggestions : HomeDestination
+    @Serializable
+    data object TopPlaying : HomeDestination
+    @Serializable
+    data object Histories : HomeDestination
 
     @Serializable
     data class AlbumDetail(

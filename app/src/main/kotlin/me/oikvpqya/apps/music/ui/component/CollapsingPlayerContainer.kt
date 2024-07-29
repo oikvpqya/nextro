@@ -1,5 +1,8 @@
 package me.oikvpqya.apps.music.ui.component
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,21 +25,45 @@ import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.ui.component.fake.ImageContainerSample
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_SIZE
 
+const val UI_PLAYER_SHARED_KEY_ARTWORK = "key_ui_player_artwork"
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CollapsingPlayerContainer(
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    sharedTransitionScope: SharedTransitionScope,
+    artwork: Any?,
     title: String,
     summary: String,
     isPlaying: Boolean,
     playingProgress: Float,
     onPlayOrPauseClick: () -> Unit,
-    iconContainer: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TrackContainer(
         modifier = modifier,
         titleContainer = { TitleContainer(title) },
         summaryContainer = { SummaryContainer(summary) },
-        iconContainer = iconContainer,
+        iconContainer = {
+            with(sharedTransitionScope) {
+                Box(
+                    modifier = Modifier
+                        .sharedElement(
+                            state = rememberSharedContentState(key = UI_PLAYER_SHARED_KEY_ARTWORK),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                        )
+                ) {
+                    if (artwork != null) {
+                        ImageContainerSample(
+                            data = artwork,
+                            size = LIST_TRACK_ALBUM_SIZE
+                        )
+                    } else {
+                        ImageContainerSample(size = LIST_TRACK_ALBUM_SIZE)
+                    }
+                }
+            }
+        },
         widgetContainer = {
             Box(
                 modifier = Modifier
@@ -75,12 +102,15 @@ fun CollapsingPlayerContainer(
             }
 
         },
-        enabledMarqueeText = true
+        enabledMarqueeText = true,
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CollapsingPlayerContainer(
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    sharedTransitionScope: SharedTransitionScope,
     modifier: Modifier = Modifier,
 ) {
     val mediaInfo by LocalMediaInfoState.current
@@ -90,6 +120,9 @@ fun CollapsingPlayerContainer(
     val savedSong = if (queueIndex >= 0 && queue.size > queueIndex) queue[queueIndex] else null
     CollapsingPlayerContainer(
         modifier = modifier,
+        animatedVisibilityScope = animatedVisibilityScope,
+        sharedTransitionScope = sharedTransitionScope,
+        artwork = mediaInfo.song?.getArtworkUri() ?: savedSong?.tag?.getArtworkUri(),
         title = mediaInfo.song?.name ?: savedSong?.name ?: "Not Playing",
         summary = mediaInfo.song?.summary ?: savedSong?.summary ?: "${mediaInfo.state}",
         isPlaying = mediaInfo.isPlaying,
@@ -101,15 +134,5 @@ fun CollapsingPlayerContainer(
                 mediaHandler?.playSongs(queue, queueIndex, 0L)
             }
         },
-        iconContainer = {
-            val data = mediaInfo.song?.getArtworkUri() ?: savedSong?.tag?.getArtworkUri()
-            if (data != null) {
-                ImageContainerSample(
-                    data = data,
-                    size = LIST_TRACK_ALBUM_SIZE
-                )
-            }
-            else ImageContainerSample(size = LIST_TRACK_ALBUM_SIZE)
-        }
     )
 }
