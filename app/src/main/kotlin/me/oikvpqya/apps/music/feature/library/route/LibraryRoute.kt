@@ -1,19 +1,29 @@
 package me.oikvpqya.apps.music.feature.library.route
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
 import me.oikvpqya.apps.music.feature.AlbumsDestination
 import me.oikvpqya.apps.music.feature.ArtistsDestination
+import me.oikvpqya.apps.music.feature.Destination
 import me.oikvpqya.apps.music.feature.HomeDestination
 import me.oikvpqya.apps.music.feature.PlaylistsDestination
 import me.oikvpqya.apps.music.feature.library.screen.LibrariesDetailScreen
@@ -24,6 +34,7 @@ import me.oikvpqya.apps.music.feature.library.screen.TopPlayingScreen
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
 import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.oikvpqya.apps.music.model.Libraries
+import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.model.Tag
 import me.oikvpqya.apps.music.model.asPlaylistTag
 import me.oikvpqya.apps.music.ui.component.AppIcons
@@ -64,7 +75,7 @@ fun AlbumsRoute(
                     }
                 }
                 navController.navigate(destination)
-            }
+            },
         )
     }
 }
@@ -102,7 +113,7 @@ fun ArtistsRoute(
                     }
                 }
                 navController.navigate(destination)
-            }
+            },
         )
     }
 }
@@ -148,7 +159,7 @@ fun PlaylistsRoute(
                     }
                 }
                 navController.navigate(destination)
-            }
+            },
         )
     }
 }
@@ -192,36 +203,10 @@ fun SuggestionsRoute(
         AppDragHandle(
             text = "Suggestions",
             actions = {
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.Suggestions)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.ForYou,
-                        contentDescription = null,
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.Histories)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.History,
-                        contentDescription = null,
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.TopPlaying)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.TrendingUp,
-                        contentDescription = null,
-                    )
-                }
+                SheetNavigationIcons(
+                    navController = navController,
+                    icons = homeIcons,
+                )
             },
         )
         SuggestionsScreen(
@@ -252,36 +237,10 @@ fun TopPlayingRoute(
         AppDragHandle(
             text = "TopPlaying",
             actions = {
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.Suggestions)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.ForYou,
-                        contentDescription = null,
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.Histories)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.History,
-                        contentDescription = null,
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.TopPlaying)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.TrendingUp,
-                        contentDescription = null,
-                    )
-                }
+                SheetNavigationIcons(
+                    navController = navController,
+                    icons = homeIcons,
+                )
             },
         )
         TopPlayingScreen(
@@ -305,7 +264,7 @@ fun TopPlayingRoute(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -326,36 +285,10 @@ fun HistoriesRoute(
         AppDragHandle(
             text = "Histories",
             actions = {
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.Suggestions)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.ForYou,
-                        contentDescription = null,
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.Histories)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.History,
-                        contentDescription = null,
-                    )
-                }
-                IconButton(
-                    onClick = {
-                        navController.navigate(HomeDestination.TopPlaying)
-                    }
-                ) {
-                    Icon(
-                        imageVector = AppIcons.TrendingUp,
-                        contentDescription = null,
-                    )
-                }
+                SheetNavigationIcons(
+                    navController = navController,
+                    icons = homeIcons,
+                )
             },
         )
         SongsScreen(
@@ -375,19 +308,13 @@ fun PlaylistDetailRoute(
     modifier: Modifier = Modifier,
 ) {
     val songs by viewModel.favoriteSharedFlow.collectAsStateWithLifecycle(persistentListOf())
-    val mediaHandler by LocalMediaHandlerState.current
-    LibrariesDetailScreen(
+    DetailRoute(
         modifier = modifier,
+        navController = navController,
+        songs = songs,
         name = viewModel.name,
         summary = viewModel.summary,
         albumId = viewModel.albumId,
-        songs = songs,
-        firstItems = emptyList(),
-        secondItems = emptyList(),
-        onLibrariesClick = {},
-        onSongClick = { index ->
-            mediaHandler?.playSongs(songs, index)
-        }
     )
 }
 
@@ -398,19 +325,13 @@ fun ArtistDetailRoute(
     modifier: Modifier = Modifier,
 ) {
     val songs by viewModel.artistSongsSharedFlow.collectAsStateWithLifecycle(persistentListOf())
-    val mediaHandler by LocalMediaHandlerState.current
-    LibrariesDetailScreen(
+    DetailRoute(
         modifier = modifier,
+        navController = navController,
+        songs = songs,
         name = viewModel.name,
         summary = viewModel.summary,
         albumId = viewModel.albumId,
-        songs = songs,
-        firstItems = emptyList(),
-        secondItems = emptyList(),
-        onLibrariesClick = {},
-        onSongClick = { index ->
-            mediaHandler?.playSongs(songs, index)
-        }
     )
 }
 
@@ -421,18 +342,122 @@ fun AlbumDetailRoute(
     modifier: Modifier = Modifier,
 ) {
     val songs by viewModel.albumSongsSharedFlow.collectAsStateWithLifecycle(persistentListOf())
-    val mediaHandler by LocalMediaHandlerState.current
-    LibrariesDetailScreen(
+    DetailRoute(
         modifier = modifier,
+        navController = navController,
+        songs = songs,
         name = viewModel.name,
         summary = viewModel.summary,
         albumId = viewModel.albumId,
-        songs = songs,
-        firstItems = emptyList(),
-        secondItems = emptyList(),
-        onLibrariesClick = {},
-        onSongClick = { index ->
-            mediaHandler?.playSongs(songs, index)
-        }
     )
 }
+
+@Composable
+fun DetailRoute(
+    navController: NavController,
+    songs: ImmutableList<Library.Song>,
+    name: String,
+    summary: String,
+    albumId: Long,
+    modifier: Modifier = Modifier,
+) {
+    val mediaHandler by LocalMediaHandlerState.current
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+    ) {
+        AppDragHandle(
+            text = "",
+            actions = {
+                DetailSheetNavigationIcons(
+                    navController = navController,
+                )
+            },
+        )
+        LibrariesDetailScreen(
+            name = name,
+            summary = summary,
+            albumId = albumId,
+            songs = songs,
+            firstItems = emptyList(),
+            secondItems = emptyList(),
+            onLibrariesClick = {},
+            onSongClick = { index ->
+                mediaHandler?.playSongs(songs, index)
+            }
+        )
+    }
+}
+
+private data class SheetNavigationItem(
+    val icon: ImageVector,
+    val route: Destination,
+)
+
+@Composable
+private fun RowScope.SheetNavigationIcons(
+    navController: NavController,
+    icons: ImmutableList<SheetNavigationItem>
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    icons.forEach { item ->
+        val selected = currentDestination?.hierarchy
+            ?.any { it.hasRoute(item.route::class) }
+            ?: false
+        if (selected) {
+            FilledTonalIconButton(
+                modifier = Modifier.size(36.dp),
+                onClick = {
+//                    navController.navigate(item.route)
+                }
+            ) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = null,
+                )
+            }
+        } else {
+            IconButton(
+                modifier = Modifier.size(36.dp),
+                onClick = {
+                    navController.navigate(item.route) {
+//                        popUpTo(navController.graph.findStartDestination().id) {
+//                            saveState = true
+//                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            ) {
+                Icon(
+                    imageVector = item.icon,
+                    contentDescription = null,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RowScope.DetailSheetNavigationIcons(
+    navController: NavController,
+) {
+    FilledTonalIconButton(
+        modifier = Modifier.size(36.dp),
+        onClick = {
+            navController.navigateUp()
+        }
+    ) {
+        Icon(
+            imageVector = AppIcons.Close,
+            contentDescription = null,
+        )
+    }
+}
+
+private val homeIcons: ImmutableList<SheetNavigationItem> = persistentListOf(
+    SheetNavigationItem(AppIcons.ForYou, HomeDestination.Suggestions),
+    SheetNavigationItem(AppIcons.History, HomeDestination.Histories),
+    SheetNavigationItem(AppIcons.TrendingUp, HomeDestination.TopPlaying),
+)

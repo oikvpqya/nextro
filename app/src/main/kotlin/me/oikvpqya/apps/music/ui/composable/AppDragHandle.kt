@@ -1,5 +1,6 @@
 package me.oikvpqya.apps.music.ui.composable
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -75,6 +76,7 @@ fun AppDragHandle(
                     .padding(end = 16.dp, bottom = 8.dp)
                     .align(Alignment.BottomEnd),
                 content = actions,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
             )
         }
     }
