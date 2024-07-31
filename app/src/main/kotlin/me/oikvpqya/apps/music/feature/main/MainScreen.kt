@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -35,10 +36,14 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.Navigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.get
 import me.oikvpqya.apps.music.feature.AppDestination
+import me.oikvpqya.apps.music.feature.MainOverlay
 import me.oikvpqya.apps.music.ui.util.LocalAppSnackbarHandler
 import me.oikvpqya.apps.music.feature.main.component.MainBottomBar
 import me.oikvpqya.apps.music.feature.player.component.ExpandingPlayerContainer
@@ -57,7 +62,11 @@ fun MainScreen(
     routeFactories: Set<RouteFactory>,
     modifier: Modifier = Modifier,
 ) {
-    val navController = rememberNavController()
+    val sheetState = rememberModalBottomSheetState()
+    val modalBottomSheetNavigator = rememberModalBottomSheetNavigator(sheetState)
+    val navController = rememberNavController(
+        modalBottomSheetNavigator
+    )
     val snackbarHostState = LocalAppSnackbarHandler.current.state
     val bottomSheetState = rememberStandardBottomSheetState(
         initialValue = SheetValue.Expanded,
@@ -97,6 +106,16 @@ fun MainScreen(
             )
         }
     }
+
+    val isModalBottomSheetNavigator = navController.navigatorProvider
+        .get<Navigator<out NavDestination>>(ModalBottomSheetNavigator.NAME)
+            as? ModalBottomSheetNavigator != null
+    if (isModalBottomSheetNavigator) {
+        ModalBottomSheetHost(
+            modalBottomSheetNavigator = modalBottomSheetNavigator,
+            sheetState = sheetState,
+        )
+    }
 }
 
 @Composable
@@ -135,6 +154,9 @@ private fun MainScreenSheetContent(
             factories = routeFactories,
             navController = navController,
         )
+        modalBottomSheet<MainOverlay.InfoModalBottomSheet> {
+            // TODO
+        }
     }
 }
 

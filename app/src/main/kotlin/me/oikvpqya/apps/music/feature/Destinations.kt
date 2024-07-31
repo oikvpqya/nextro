@@ -37,6 +37,16 @@ sealed interface PreferenceDestination : Destination {
     data object Root : PreferenceDestination
 }
 
+sealed interface MainOverlay : Destination {
+
+    @Serializable
+    data class InfoModalBottomSheet(
+        val name: String,
+        val summary: String,
+        val mediaId: Long,
+    ) : MainOverlay
+}
+
 val MainDestination.startDestination: Destination
     get() = when (this) {
         MainDestination.Albums -> AlbumsDestination.Albums
