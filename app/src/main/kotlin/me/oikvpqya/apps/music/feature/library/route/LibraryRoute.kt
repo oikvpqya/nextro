@@ -222,15 +222,15 @@ fun TopPlayingRoute(
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val topSongs by viewModel.topSongsSharedFlow
+    val topSongs: ImmutableList<Library.Song>? by viewModel.topSongsSharedFlow
         .map { it.take(4).toImmutableList() }
-        .collectAsStateWithLifecycle(persistentListOf())
-    val topAlbums by viewModel.topAlbumsSharedFlow
+        .collectAsStateWithLifecycle(null)
+    val topAlbums: ImmutableList<Libraries.Album>? by viewModel.topAlbumsSharedFlow
         .map { it.take(4).toImmutableList() }
-        .collectAsStateWithLifecycle(persistentListOf())
-    val topArtists by viewModel.topArtistsSharedFlow
+        .collectAsStateWithLifecycle(null)
+    val topArtists: ImmutableList<Libraries.Default>? by viewModel.topArtistsSharedFlow
         .map { it.take(4).toImmutableList() }
-        .collectAsStateWithLifecycle(persistentListOf())
+        .collectAsStateWithLifecycle(null)
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -245,9 +245,9 @@ fun TopPlayingRoute(
         )
         TopPlayingScreen(
             modifier = Modifier.fillMaxSize(),
-            topAlbums = topAlbums,
-            topArtists = topArtists,
-            topSongs = topSongs,
+            topAlbums = topAlbums ?: return@Column,
+            topArtists = topArtists ?: return@Column,
+            topSongs = topSongs ?: return@Column,
             onLibrariesClick = { libraries ->
                 with(libraries) {
                     when (this) {
