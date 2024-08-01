@@ -2,6 +2,8 @@ package me.oikvpqya.apps.music.media3
 
 import android.content.Intent
 import android.util.Log
+import androidx.annotation.OptIn
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import kotlinx.coroutines.cancel
@@ -27,13 +29,13 @@ class AppMediaLibraryService : MediaLibraryService() {
     }
 
     // https://github.com/androidx/media/issues/167#issuecomment-1615184728
+    @OptIn(UnstableApi::class)
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        if (!player.playWhenReady) {
+        if (!isPlaybackOngoing) {
             session.release()
             player.release()
             coroutineScope.cancel()
-            stopSelf()
         }
     }
 

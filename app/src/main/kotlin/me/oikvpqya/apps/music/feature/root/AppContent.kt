@@ -20,8 +20,8 @@ import me.oikvpqya.apps.music.data.MediaSynchronizer
 import me.oikvpqya.apps.music.feature.AppDestination
 import me.oikvpqya.apps.music.feature.RootRouteFactory
 import me.oikvpqya.apps.music.feature.permission.PermissionRoute
-import me.oikvpqya.apps.music.media3.AppMediaController
-import me.oikvpqya.apps.music.media3.AppMediaInfo
+import me.oikvpqya.apps.music.data.AppMediaController
+import me.oikvpqya.apps.music.data.AppMediaInfo
 import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.navigation.RouteFactory

@@ -7,6 +7,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.RenderersFactory
+import androidx.media3.exoplayer.audio.MediaCodecAudioRenderer
+import androidx.media3.exoplayer.mediacodec.MediaCodecSelector
 import androidx.media3.session.MediaLibraryService
 import androidx.media3.session.MediaSession
 import com.google.common.util.concurrent.ListenableFuture
@@ -28,6 +31,25 @@ interface MediaLibrarySessionComponent {
     val player: Player
     val session: MediaLibraryService.MediaLibrarySession
 
+    @OptIn(UnstableApi::class)
+    @Provides
+    @MediaLibraryServiceScope
+    fun provideRenderersFactory(
+        service: AppMediaLibraryService,
+    ): RenderersFactory {
+        return RenderersFactory { eventHandler, _, audioRendererEventListener, _, _ ->
+            arrayOf(
+                MediaCodecAudioRenderer(
+                    service,
+                    MediaCodecSelector.DEFAULT,
+                    eventHandler,
+                    audioRendererEventListener,
+                ),
+            )
+        }
+    }
+
+    @OptIn(UnstableApi::class)
     @Provides
     @MediaLibraryServiceScope
     fun providePlayer(
@@ -35,6 +57,7 @@ interface MediaLibrarySessionComponent {
         coroutineScope: MediaLibraryServiceCoroutineScope,
         databaseRepository: AppDatabaseRepository,
         preferenceRepository: PreferenceRepository,
+        renderersFactory: RenderersFactory,
     ) : Player {
         return ExoPlayer.Builder(service)
             .apply {
@@ -44,6 +67,7 @@ interface MediaLibrarySessionComponent {
                     .build()
                 setAudioAttributes(attributes, true)
             }
+            .setRenderersFactory(renderersFactory)
             .setHandleAudioBecomingNoisy(true)
             .build()
             .apply {

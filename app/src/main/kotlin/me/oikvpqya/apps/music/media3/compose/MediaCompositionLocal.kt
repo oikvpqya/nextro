@@ -2,8 +2,8 @@ package me.oikvpqya.apps.music.media3.compose
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.staticCompositionLocalOf
-import me.oikvpqya.apps.music.media3.AppMediaHandler
-import me.oikvpqya.apps.music.media3.AppMediaInfo
+import me.oikvpqya.apps.music.data.AppMediaHandler
+import me.oikvpqya.apps.music.data.AppMediaInfo
 
 val LocalMediaHandlerState = staticCompositionLocalOf<State<AppMediaHandler?>> {
     error("CompositionLocal AppMediaHandler not present.")

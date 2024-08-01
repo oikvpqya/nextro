@@ -1,4 +1,4 @@
-package me.oikvpqya.apps.music.media3
+package me.oikvpqya.apps.music.data
 
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.model.PlaybackRepeatMode

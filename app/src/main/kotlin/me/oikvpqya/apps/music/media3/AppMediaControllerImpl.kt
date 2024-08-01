@@ -2,7 +2,6 @@ package me.oikvpqya.apps.music.media3
 
 import android.content.ComponentName
 import android.content.Context
-import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
@@ -23,6 +22,9 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.guava.asDeferred
 import kotlinx.coroutines.launch
 import me.oikvpqya.apps.music.data.AppDatabaseRepository
+import me.oikvpqya.apps.music.data.AppMediaController
+import me.oikvpqya.apps.music.data.AppMediaHandler
+import me.oikvpqya.apps.music.data.AppMediaInfo
 import me.oikvpqya.apps.music.data.PreferenceRepository
 import me.oikvpqya.apps.music.media3.util.asInt
 import me.oikvpqya.apps.music.media3.util.asMediaItem
@@ -43,18 +45,14 @@ class AppMediaControllerImpl(
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val sessionToken by lazy {
-        SessionToken(context, ComponentName(context, AppMediaLibraryService::class.java)).also {
-            Log.d("AppMediaControllerImpl", "create sessionToken: $it")
-        }
+        SessionToken(context, ComponentName(context, AppMediaLibraryService::class.java))
     }
 
     private val mediaControllerDefer by lazy {
         MediaController.Builder(
             context,
             sessionToken
-        ).buildAsync().asDeferred().also {
-            Log.d("AppMediaControllerImpl", "create mediaControllerDefer: $it")
-        }
+        ).buildAsync().asDeferred()
     }
 
     private val _playbackSharedFlow = MutableSharedFlow<PlaybackState>(replay = 1)
@@ -304,9 +302,4 @@ class AppMediaControllerImpl(
             }
         }
     }
-}
-
-interface AppMediaController {
-    val mediaHandlerFlow: Flow<AppMediaHandler>
-    val mediaInfoFlow: Flow<AppMediaInfo>
 }
