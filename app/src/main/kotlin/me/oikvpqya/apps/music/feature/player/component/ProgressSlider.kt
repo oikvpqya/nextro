@@ -5,9 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,10 +16,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ir.mahozad.multiplatform.wavyslider.material3.Track as WavyTrack
 import kotlin.math.roundToLong
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProgressSlider(
     duration: Long,
@@ -59,12 +55,6 @@ fun ProgressSlider(
             onValueChangeFinished = {
                 onSliding = false
                 onValueChangeFinished(sliderDuration)
-            },
-            track = { sliderState ->
-                SliderDefaults.WavyTrack(
-                    sliderState = sliderState,
-                    incremental = true,
-                )
             },
         )
         TimestampContainer(duration = duration)
