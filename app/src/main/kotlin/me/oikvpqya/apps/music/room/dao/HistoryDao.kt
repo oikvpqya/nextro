@@ -22,7 +22,7 @@ interface HistoryDao {
 
     @Query(
         value = """
-        SELECT song.tag, history.timestamp FROM song, history
+        SELECT song.*, history.timestamp FROM song, history
         WHERE song.mediaId = history.mediaId
         ORDER BY timestamp DESC
     """
@@ -31,7 +31,7 @@ interface HistoryDao {
 
     @Query(
         value = """
-        SELECT song.tag, distinct_history.timestamp FROM song, (
+        SELECT song.*, distinct_history.timestamp FROM song, (
             SELECT DISTINCT history.mediaId, history.timestamp FROM history
         ) AS distinct_history
         WHERE song.mediaId = distinct_history.mediaId

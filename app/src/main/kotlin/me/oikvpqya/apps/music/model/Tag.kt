@@ -1,6 +1,5 @@
 package me.oikvpqya.apps.music.model
 
-import androidx.room.ColumnInfo
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,7 +8,6 @@ sealed interface Tag {
 
     @Serializable
     data class Song(
-        @ColumnInfo(name = "media_id_long")
         val mediaId: Long,
         val album: String,
         val artist: String,

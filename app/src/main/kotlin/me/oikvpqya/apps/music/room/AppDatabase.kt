@@ -2,7 +2,6 @@ package me.oikvpqya.apps.music.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import me.oikvpqya.apps.music.room.dao.BlacklistDao
 import me.oikvpqya.apps.music.room.dao.FavoriteDao
 import me.oikvpqya.apps.music.room.dao.HistoryDao
@@ -26,7 +25,6 @@ import me.oikvpqya.apps.music.room.dao.SongDao
     version = 1,
     exportSchema = false,
 )
-@TypeConverters(value = [AppTypeConverter::class])
 abstract class AppDatabase : RoomDatabase() {
     abstract fun blacklistDao(): BlacklistDao
     abstract fun favoriteDao(): FavoriteDao

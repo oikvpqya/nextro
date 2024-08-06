@@ -21,7 +21,7 @@ interface QueueDao {
 
     @Query(
         value = """
-        SELECT song.tag FROM song, queue
+        SELECT song.* FROM song, queue
         WHERE song.mediaId = queue.mediaId
     """
     )

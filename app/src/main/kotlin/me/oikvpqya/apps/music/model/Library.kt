@@ -1,6 +1,5 @@
 package me.oikvpqya.apps.music.model
 
-import androidx.room.Ignore
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,35 +12,105 @@ sealed interface Library {
         override val tag: Tag.Song
 
         data class Default(
-            override val tag: Tag.Song,
-            @Ignore
-            override val name: String,
-            @Ignore
-            override val summary: String
+            private val mediaId: Long,
+            private val album: String,
+            private val artist: String,
+            private val title: String,
+            private val albumArtist: String,
+            private val composer: String,
+            private val data: String,
+            private val dateModified: Long,
+            private val duration: Long,
+            private val genre: String,
+            private val trackNumber: Long,
+            private val year: Long,
+            private val albumId: Long,
         ) : Song {
-            constructor(tag: Tag.Song) : this(tag, tag.title, tag.artist)
+
+            constructor(tag: Tag.Song) : this(
+                tag.mediaId, tag.album, tag.artist, tag.title, tag.albumArtist, tag.composer,
+                tag.data, tag.dateModified, tag.duration, tag.genre, tag.trackNumber, tag.year,
+                tag.albumId,
+            )
+
+            override val tag: Tag.Song
+                get() = Tag.Song(
+                    mediaId, album, artist, title, albumArtist, composer, data, dateModified,
+                    duration, genre, trackNumber, year, albumId,
+                )
+            override val name: String
+                get() = title
+            override val summary: String
+                get() = artist
+
         }
 
         data class History(
-            override val tag: Tag.Song,
-            val timestamp: Long,
-            @Ignore
-            override val name: String,
-            @Ignore
-            override val summary: String
+            private val mediaId: Long,
+            private val album: String,
+            private val artist: String,
+            private val title: String,
+            private val albumArtist: String,
+            private val composer: String,
+            private val data: String,
+            private val dateModified: Long,
+            private val duration: Long,
+            private val genre: String,
+            private val trackNumber: Long,
+            private val year: Long,
+            private val albumId: Long,
+            private val timestamp: Long,
         ) : Song {
-            constructor(tag: Tag.Song, timestamp: Long) : this(tag, timestamp, tag.title, tag.artist)
+
+            override val tag: Tag.Song
+                get() = Tag.Song(
+                    mediaId, album, artist, title, albumArtist, composer, data, dateModified,
+                    duration, genre, trackNumber, year, albumId,
+                )
+            override val name: String
+                get() = title
+            override val summary: String
+                get() = artist
+
+            constructor(tag: Tag.Song, timestamp: Long) : this(
+                tag.mediaId, tag.album, tag.artist, tag.title, tag.albumArtist, tag.composer,
+                tag.data, tag.dateModified, tag.duration, tag.genre, tag.trackNumber, tag.year,
+                tag.albumId, timestamp
+            )
         }
 
         data class PlayCount(
-            override val tag: Tag.Song,
-            val count: Long,
-            @Ignore
-            override val name: String,
-            @Ignore
-            override val summary: String
+            private val mediaId: Long,
+            private val album: String,
+            private val artist: String,
+            private val title: String,
+            private val albumArtist: String,
+            private val composer: String,
+            private val data: String,
+            private val dateModified: Long,
+            private val duration: Long,
+            private val genre: String,
+            private val trackNumber: Long,
+            private val year: Long,
+            private val albumId: Long,
+            private val count: Long,
         ) : Song {
-            constructor(tag: Tag.Song, count: Long) : this(tag, count, tag.title, tag.artist)
+
+            override val tag: Tag.Song
+                get() = Tag.Song(
+                    mediaId, album, artist, title, albumArtist, composer, data, dateModified,
+                    duration, genre, trackNumber, year, albumId,
+                )
+            override val name: String
+                get() = title
+            override val summary: String
+                get() = artist
+
+            constructor(tag: Tag.Song, count: Long) : this(
+                tag.mediaId, tag.album, tag.artist, tag.title, tag.albumArtist, tag.composer,
+                tag.data, tag.dateModified, tag.duration, tag.genre, tag.trackNumber, tag.year,
+                tag.albumId, count
+            )
         }
     }
 }

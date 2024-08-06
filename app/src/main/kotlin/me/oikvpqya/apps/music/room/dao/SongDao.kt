@@ -17,28 +17,39 @@ interface SongDao {
     data class SongEntity(
         @PrimaryKey
         val mediaId: Long,
-        val tag: Tag.Song,
+        val album: String,
+        val artist: String,
+        val title: String,
+        val albumArtist: String,
+        val composer: String,
+        val data: String,
+        val dateModified: Long,
+        val duration: Long,
+        val genre: String,
+        val trackNumber: Long,
+        val year: Long,
+        val albumId: Long,
     )
 
     @Query(
         value = """
-        SELECT tag FROM song
-        WHERE mediaId = :mediaId
+        SELECT song.* FROM song
+        WHERE song.mediaId = :mediaId
     """
     )
     fun get(mediaId: Long): Flow<Library.Song.Default?>
 
     @Query(
         value = """
-        SELECT tag FROM song
-        WHERE mediaId = :mediaId
+        SELECT song.* FROM song
+        WHERE song.mediaId = :mediaId
     """
     )
     suspend fun getOneShot(mediaId: Long): Library.Song.Default?
 
     @Query(
         value = """
-        SELECT tag FROM song
+        SELECT song.* FROM song
     """
     )
     fun getAll(): Flow<List<Library.Song.Default>>
@@ -46,16 +57,31 @@ interface SongDao {
     @Query(
         value = """
         INSERT INTO song
-        VALUES (:mediaId, :tag)
-        ON CONFLICT (mediaId) DO NOTHING
+        VALUES (:mediaId, :album, :artist, :title, :albumArtist, :composer, :data, :dateModified,
+            :duration, :genre, :trackNumber, :year, :albumId)
+        ON CONFLICT (song.mediaId) DO NOTHING
     """
     )
-    suspend fun upsert(mediaId: Long, tag: Tag.Song)
+    suspend fun upsert(
+        mediaId: Long,
+        album: String,
+        artist: String,
+        title: String,
+        albumArtist: String,
+        composer: String,
+        data: String,
+        dateModified: Long,
+        duration: Long,
+        genre: String,
+        trackNumber: Long,
+        year: Long,
+        albumId: Long,
+    )
 
     @Query(
         value = """
         DELETE FROM song
-        WHERE mediaId = :mediaId
+        WHERE song.mediaId = :mediaId
     """
     )
     suspend fun delete(mediaId: Long)
@@ -66,4 +92,9 @@ interface SongDao {
     """
     )
     suspend fun deleteAll()
+}
+
+suspend fun SongDao.upsert(tag: Tag.Song) {
+    with(tag) { upsert(mediaId, album, artist, title, albumArtist, composer, data, dateModified,
+            duration, genre, trackNumber, year, albumId) }
 }

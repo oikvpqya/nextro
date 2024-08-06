@@ -21,7 +21,7 @@ interface PlayCountDao {
 
     @Query(
         value = """
-        SELECT song.tag, play_count.count FROM song, play_count
+        SELECT song.*, play_count.count FROM song, play_count
         WHERE song.mediaId = play_count.mediaId
         ORDER BY count DESC
     """

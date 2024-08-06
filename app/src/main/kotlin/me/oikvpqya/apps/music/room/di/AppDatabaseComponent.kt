@@ -9,7 +9,6 @@ import me.oikvpqya.apps.music.data.AppDatabaseRepository
 import me.oikvpqya.apps.music.room.AppDatabase
 import me.oikvpqya.apps.music.room.AppDatabaseRepositoryRoomFake
 import me.oikvpqya.apps.music.room.AppDatabaseRepositoryRoomImpl
-import me.oikvpqya.apps.music.room.AppTypeConverter
 import me.oikvpqya.apps.music.room.dao.*
 import me.tatarka.inject.annotations.Provides
 
@@ -35,7 +34,6 @@ interface AppDatabaseComponent {
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
 //            .allowMainThreadQueries()
-            .addTypeConverter(AppTypeConverter())
             .build()
     }
 

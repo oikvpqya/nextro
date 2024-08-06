@@ -20,7 +20,7 @@ interface FavoriteDao {
 
     @Query(
         value = """
-        SELECT song.tag FROM song, favorite
+        SELECT song.* FROM song, favorite
         WHERE song.mediaId = favorite.mediaId
         AND song.mediaId = :mediaId
     """
@@ -29,7 +29,7 @@ interface FavoriteDao {
 
     @Query(
         value = """
-        SELECT song.tag FROM song, favorite
+        SELECT song.* FROM song, favorite
         WHERE song.mediaId = favorite.mediaId
         AND song.mediaId = :mediaId
     """
@@ -38,7 +38,7 @@ interface FavoriteDao {
 
     @Query(
         value = """
-        SELECT song.tag FROM song, favorite
+        SELECT song.* FROM song, favorite
         WHERE song.mediaId = favorite.mediaId
     """
     )

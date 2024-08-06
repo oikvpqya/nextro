@@ -84,11 +84,11 @@ class AppDatabaseRepositoryRoomImpl(
 
     override suspend fun setFavorite(songs: List<MediaItem>) {
         with(appDatabase) {
-            useWriterConnection {
-                it.immediateTransaction {
-                    songs.forEach {
+            useWriterConnection { transactor ->
+                transactor.immediateTransaction {
+                    songs.forEach { song ->
                         with(favoriteDao) {
-                            val tag = it.asTag()
+                            val tag = song.asTag()
                             if (getOneShot(tag.mediaId) != null) {
                                 delete(tag.mediaId)
                             } else {
@@ -107,13 +107,10 @@ class AppDatabaseRepositoryRoomImpl(
 
     override suspend fun setQueues(songs: List<MediaItem>) {
         with(appDatabase) {
-            useWriterConnection {
-                it.immediateTransaction {
+            useWriterConnection { transactor ->
+                transactor.immediateTransaction {
                     queueDao.deleteAll()
-                    songs.forEach {
-                        val tag = it.asTag()
-                        queueDao.insert(tag.mediaId)
-                    }
+                    songs.forEach { queueDao.insert(it.asTag().mediaId) }
                 }
             }
             // Manually triggers invalidation
@@ -126,8 +123,8 @@ class AppDatabaseRepositoryRoomImpl(
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
                     val epochMilliseconds = Clock.System.now().toEpochMilliseconds()
-                    songs.forEach {
-                        val tag = it.asTag()
+                    songs.forEach { song ->
+                        val tag = song.asTag()
                         historyDao.insert(epochMilliseconds, tag.mediaId)
                         playCountDao.upsert(tag.mediaId)
                     }
@@ -147,10 +144,7 @@ class AppDatabaseRepositoryRoomImpl(
         with(appDatabase) {
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
-                    songs.forEach { song ->
-                        val tag = song.tag
-                        songDao.upsert(tag.mediaId, tag)
-                    }
+                    songs.forEach { songDao.upsert(it.tag) }
                 }
             }
             // Manually triggers invalidation

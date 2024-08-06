@@ -22,7 +22,7 @@ interface PlaylistSongDao {
 
     @Query(
         value = """
-        SELECT song.tag FROM song, playlist_song
+        SELECT song.* FROM song, playlist_song
         WHERE playlist_song.playlistId = :playlistId
         AND song.mediaId = playlist_song.mediaId
     """
