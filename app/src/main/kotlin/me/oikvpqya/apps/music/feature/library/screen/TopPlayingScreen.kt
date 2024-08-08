@@ -20,6 +20,7 @@ fun TopPlayingScreen(
     topAlbums: ImmutableList<Libraries.Album>,
     topArtists: ImmutableList<Libraries.Default>,
     topSongs: ImmutableList<Library.Song>,
+    isSheetExpanded: Boolean,
     onLibrariesClick: (Libraries) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -27,7 +28,8 @@ fun TopPlayingScreen(
     val scrollableState = rememberLazyListState()
     LazyColumn(
         modifier = modifier,
-        state = scrollableState
+        state = scrollableState,
+        userScrollEnabled = isSheetExpanded,
     ) {
         homeLibraryContainer(
             title = "Top Songs",

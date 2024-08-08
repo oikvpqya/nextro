@@ -22,6 +22,7 @@ import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_SIZE
 @Composable
 internal fun SongsScreen(
     items: List<Library.Song>,
+    isSheetExpanded: Boolean,
     modifier: Modifier = Modifier,
     onItemClick: (Int) -> Unit
 ) {
@@ -33,6 +34,7 @@ internal fun SongsScreen(
         MainContent(
             scrollableState = scrollableState,
             items = items,
+            isSheetExpanded = isSheetExpanded,
             onItemClick = onItemClick,
         )
     }
@@ -42,11 +44,13 @@ internal fun SongsScreen(
 private fun BoxScope.MainContent(
     scrollableState: LazyListState,
     items: List<Library.Song>,
+    isSheetExpanded: Boolean,
     onItemClick: (Int) -> Unit
 ) {
     LazyColumn(
         state = scrollableState,
-        modifier = Modifier
+        modifier = Modifier,
+        userScrollEnabled = isSheetExpanded,
     ) {
         itemsIndexed(items = items) { index, song ->
             TrackContainer(

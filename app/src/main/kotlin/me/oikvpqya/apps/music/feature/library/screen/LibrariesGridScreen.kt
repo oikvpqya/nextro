@@ -28,6 +28,7 @@ import me.oikvpqya.apps.music.ui.component.fake.ImageMaxContainerSample
 fun LibrariesGridScreen(
     libraries: ImmutableList<Libraries>,
     modifier: Modifier = Modifier,
+    isSheetExpanded: Boolean,
     onItemClick: (Libraries) -> Unit
 ) {
     val scrollableState = rememberLazyGridState()
@@ -38,6 +39,7 @@ fun LibrariesGridScreen(
         MainContent(
             scrollableState = scrollableState,
             libraries = libraries,
+            isSheetExpanded = isSheetExpanded,
             onItemClick = onItemClick
         )
     }
@@ -47,6 +49,7 @@ fun LibrariesGridScreen(
 private fun BoxScope.MainContent(
     scrollableState: LazyGridState,
     libraries: ImmutableList<Libraries>,
+    isSheetExpanded: Boolean,
     onItemClick: (Libraries) -> Unit
 ) {
     LazyVerticalGrid(
@@ -56,6 +59,7 @@ private fun BoxScope.MainContent(
         state = scrollableState,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        userScrollEnabled = isSheetExpanded,
     ) {
         items(libraries) { item ->
 

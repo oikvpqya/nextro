@@ -49,7 +49,7 @@ import me.oikvpqya.apps.music.feature.main.component.MainBottomBar
 import me.oikvpqya.apps.music.feature.player.component.ExpandingPlayerContainer
 import me.oikvpqya.apps.music.feature.startDestination
 import me.oikvpqya.apps.music.ui.component.CollapsingPlayerContainer
-import me.oikvpqya.apps.music.ui.navigation.RouteFactory
+import me.oikvpqya.apps.music.ui.navigation.SheetRouteFactory
 import me.oikvpqya.apps.music.ui.navigation.create
 import me.oikvpqya.apps.music.ui.util.APP_BAR_CONTAINER_HEIGHT
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_CONTAINER_HEIGHT
@@ -59,7 +59,7 @@ import me.oikvpqya.apps.music.ui.util.LIST_TRACK_CONTAINER_HEIGHT
 fun MainScreen(
     isCollapsingPlayer: Boolean,
     setCollapsingPlayerFlag: (Boolean) -> Unit,
-    routeFactories: Set<RouteFactory>,
+    routeFactories: Set<SheetRouteFactory>,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -85,13 +85,14 @@ fun MainScreen(
                 .padding(topInnerPadding),
         ) {
             BottomSheetScaffold(
+                sheetSwipeEnabled = false,
                 scaffoldState = scaffoldState,
                 sheetPeekHeight = 128.dp,
-//                sheetSwipeEnabled = false,
                 sheetContent = {
                     MainScreenSheetContent(
                         navController = navController,
                         routeFactories = routeFactories,
+                        sheetState = bottomSheetState,
                     )
                 },
                 sheetDragHandle = {},
@@ -118,10 +119,12 @@ fun MainScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainScreenSheetContent(
     navController: NavHostController,
-    routeFactories: Set<RouteFactory>,
+    sheetState: SheetState,
+    routeFactories: Set<SheetRouteFactory>,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -153,6 +156,7 @@ private fun MainScreenSheetContent(
         create(
             factories = routeFactories,
             navController = navController,
+            sheetState = sheetState,
         )
         modalBottomSheet<MainOverlay.InfoModalBottomSheet> {
             // TODO
@@ -160,7 +164,10 @@ private fun MainScreenSheetContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalSharedTransitionApi::class,
+)
 @Composable
 private fun MainScreenMainContent(
     sheetState: SheetState,

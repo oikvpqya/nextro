@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import me.oikvpqya.apps.music.feature.AppDestination
 import me.oikvpqya.apps.music.feature.library.route.LibraryRouteFactory
 import me.oikvpqya.apps.music.feature.RootRouteFactory
-import me.oikvpqya.apps.music.ui.navigation.RouteFactory
+import me.oikvpqya.apps.music.ui.navigation.SheetRouteFactory
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -30,7 +30,7 @@ class MainRouteFactory(
 @Composable
 fun MainRoute(
     navController: NavController,
-    routeFactories: Set<RouteFactory>,
+    routeFactories: Set<SheetRouteFactory>,
     viewModel: MainViewModel,
     modifier: Modifier = Modifier,
 ) {

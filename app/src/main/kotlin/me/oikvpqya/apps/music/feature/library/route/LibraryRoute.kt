@@ -1,12 +1,18 @@
 package me.oikvpqya.apps.music.feature.library.route
 
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,6 +27,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import me.oikvpqya.apps.music.feature.AlbumsDestination
 import me.oikvpqya.apps.music.feature.ArtistsDestination
 import me.oikvpqya.apps.music.feature.Destination
@@ -42,9 +49,11 @@ import me.oikvpqya.apps.music.ui.component.icons.History
 import me.oikvpqya.apps.music.ui.component.icons.TrendingUp
 import me.oikvpqya.apps.music.ui.composable.AppDragHandle
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumsRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -53,11 +62,18 @@ fun AlbumsRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "Albums",
         )
         LibrariesGridScreen(
-            modifier = modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             libraries = albums,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onItemClick = { libraries ->
                 val destination = with(libraries) {
                     when (this) {
@@ -80,9 +96,11 @@ fun AlbumsRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtistsRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -91,11 +109,18 @@ fun ArtistsRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "Artists",
         )
         LibrariesGridScreen(
-            modifier = modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             libraries = artists,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onItemClick = { libraries ->
                 val destination = with(libraries) {
                     when (this) {
@@ -118,9 +143,11 @@ fun ArtistsRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaylistsRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -137,11 +164,18 @@ fun PlaylistsRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "Playlists",
         )
         LibrariesGridScreen(
-            modifier = modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             libraries = items,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onItemClick = { libraries ->
                 val destination = with(libraries) {
                     when (this) {
@@ -164,9 +198,11 @@ fun PlaylistsRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SongsRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -176,11 +212,18 @@ fun SongsRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "Songs",
         )
         SongsScreen(
-            modifier = modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             items = songs,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onItemClick = { index ->
                 mediaHandler?.playSongs(items = songs, index = index)
             },
@@ -188,9 +231,11 @@ fun SongsRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SuggestionsRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -201,6 +246,7 @@ fun SuggestionsRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "Suggestions",
             actions = {
                 SheetNavigationIcons(
@@ -210,15 +256,23 @@ fun SuggestionsRoute(
             },
         )
         SuggestionsScreen(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             suggestionSongs = shuffledSongs,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopPlayingRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -235,6 +289,7 @@ fun TopPlayingRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "TopPlaying",
             actions = {
                 SheetNavigationIcons(
@@ -244,10 +299,16 @@ fun TopPlayingRoute(
             },
         )
         TopPlayingScreen(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             topAlbums = topAlbums ?: return@Column,
             topArtists = topArtists ?: return@Column,
             topSongs = topSongs ?: return@Column,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onLibrariesClick = { libraries ->
                 with(libraries) {
                     when (this) {
@@ -269,9 +330,11 @@ fun TopPlayingRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoriesRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -283,6 +346,7 @@ fun HistoriesRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "Histories",
             actions = {
                 SheetNavigationIcons(
@@ -292,8 +356,14 @@ fun HistoriesRoute(
             },
         )
         SongsScreen(
-            modifier = modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             items = histories,
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onItemClick = { index ->
                 mediaHandler?.playSongs(items = histories, index = index)
             },
@@ -301,9 +371,11 @@ fun HistoriesRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaylistDetailRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -311,6 +383,7 @@ fun PlaylistDetailRoute(
     DetailRoute(
         modifier = modifier,
         navController = navController,
+        sheetState = sheetState,
         songs = songs,
         name = viewModel.name,
         summary = viewModel.summary,
@@ -318,9 +391,11 @@ fun PlaylistDetailRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArtistDetailRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -328,6 +403,7 @@ fun ArtistDetailRoute(
     DetailRoute(
         modifier = modifier,
         navController = navController,
+        sheetState = sheetState,
         songs = songs,
         name = viewModel.name,
         summary = viewModel.summary,
@@ -335,9 +411,11 @@ fun ArtistDetailRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumDetailRoute(
     navController: NavController,
+    sheetState: SheetState,
     viewModel: LibraryViewModel,
     modifier: Modifier = Modifier,
 ) {
@@ -345,6 +423,7 @@ fun AlbumDetailRoute(
     DetailRoute(
         modifier = modifier,
         navController = navController,
+        sheetState = sheetState,
         songs = songs,
         name = viewModel.name,
         summary = viewModel.summary,
@@ -352,9 +431,11 @@ fun AlbumDetailRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailRoute(
     navController: NavController,
+    sheetState: SheetState,
     songs: ImmutableList<Library.Song>,
     name: String,
     summary: String,
@@ -367,6 +448,7 @@ fun DetailRoute(
         modifier = modifier.fillMaxSize(),
     ) {
         AppDragHandle(
+            modifier = Modifier.anchoredDraggable(sheetState, Orientation.Vertical),
             text = "",
             actions = {
                 DetailSheetNavigationIcons(
@@ -375,12 +457,19 @@ fun DetailRoute(
             },
         )
         LibrariesDetailScreen(
+            modifier = Modifier
+                .fillMaxSize()
+                .anchoredDraggable(
+                    sheetState, Orientation.Vertical,
+                    enabled = sheetState.currentValue != SheetValue.Expanded,
+                ),
             name = name,
             summary = summary,
             albumId = albumId,
             songs = songs,
             firstItems = emptyList(),
             secondItems = emptyList(),
+            isSheetExpanded = sheetState.currentValue == SheetValue.Expanded,
             onLibrariesClick = {},
             onSongClick = { index ->
                 mediaHandler?.playSongs(songs, index)
@@ -461,3 +550,30 @@ private val homeIcons: ImmutableList<SheetNavigationItem> = persistentListOf(
     SheetNavigationItem(AppIcons.History, HomeDestination.Histories),
     SheetNavigationItem(AppIcons.TrendingUp, HomeDestination.TopPlaying),
 )
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun Modifier.anchoredDraggable(
+    sheetState: SheetState,
+    orientation: Orientation,
+    enabled: Boolean = true,
+    reverseDirection: Boolean = false,
+    interactionSource: MutableInteractionSource? = null,
+): Modifier {
+    @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
+    val draggableState = sheetState.anchoredDraggableState.draggableState
+    @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
+    val isAnimationRunning = sheetState.anchoredDraggableState.isAnimationRunning
+    suspend fun SheetState.settle(velocity: Float) {
+        @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
+        anchoredDraggableState.settle(velocity)
+    }
+    return draggable(
+        state =  draggableState,
+        orientation = orientation,
+        enabled = enabled,
+        interactionSource = interactionSource,
+        reverseDirection = reverseDirection,
+        startDragImmediately = isAnimationRunning,
+        onDragStopped = { velocity -> launch { sheetState.settle(velocity) } }
+    )
+}

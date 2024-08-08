@@ -22,6 +22,7 @@ import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_SIZE
 @Composable
 fun SuggestionsScreen(
     suggestionSongs: ImmutableList<Library.Song>,
+    isSheetExpanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val scrollableState = rememberLazyListState()
@@ -32,7 +33,8 @@ fun SuggestionsScreen(
     if (suggestionSongs.size == 8) {
         LazyColumn(
             modifier = modifier.fillMaxSize(),
-            state = scrollableState
+            state = scrollableState,
+            userScrollEnabled = isSheetExpanded,
         ) {
             item {
                 RandomTiledLibraryContainer(

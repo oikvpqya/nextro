@@ -30,6 +30,7 @@ fun LibrariesDetailScreen(
     songs: List<Library.Song>,
     firstItems: List<Libraries>,
     secondItems: List<Libraries>,
+    isSheetExpanded: Boolean,
     onLibrariesClick: (Libraries) -> Unit,
     onSongClick: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -50,6 +51,7 @@ fun LibrariesDetailScreen(
                 firstItems = firstItems,
                 secondItems = secondItems,
                 scrollableState = scrollableState,
+                isSheetExpanded = isSheetExpanded,
                 onLibrariesClick = onLibrariesClick,
                 onSongClick = onSongClick
             )
@@ -66,13 +68,15 @@ private fun BoxScope.MainContent(
     firstItems: List<Libraries>,
     secondItems: List<Libraries>,
     scrollableState: LazyListState,
+    isSheetExpanded: Boolean,
     onLibrariesClick: (Libraries) -> Unit,
     onSongClick: (Int) -> Unit
 ) {
     songs.ifEmpty { return }
     LazyColumn(
         state = scrollableState,
-        modifier = Modifier
+        modifier = Modifier,
+        userScrollEnabled = isSheetExpanded,
     ) {
         item { LibrariesDetailScreenHeader(name, summary, albumId) }
 
