@@ -1,10 +1,10 @@
 package me.oikvpqya.apps.music.datastore
 
-import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -27,22 +27,16 @@ val ALBUMS_SORT_ORDER = intPreferencesKey("albums_sort_order")
 val REPEAT_MODE = intPreferencesKey("repeat_mode")
 val SHUFFLE_MODE = booleanPreferencesKey("shuffle_mode")
 
-val Context.dataStore by preferencesDataStore(name = "settings")
-
 @Inject
 class PreferenceRepositoryImpl(
-    private val context: Context,
+    private val store: DataStore<Preferences>,
 ) : PreferenceRepository {
 
-    override val queueIndexFlow: Flow<Int> = context.dataStore.data
-        .map { preferences ->
-            preferences[QUEUE_INDEX] ?: 0
-        }
+    override val queueIndexFlow: Flow<Int>
+        get() = store.data.map { it[QUEUE_INDEX] ?: 0 }
 
     override suspend fun updateQueueIndex(queueIndex: Int) {
-        context.dataStore.edit { preferences ->
-            preferences[QUEUE_INDEX] = queueIndex
-        }
+        store.edit { it[QUEUE_INDEX] = queueIndex }
     }
 
     override val songsSortByFlow: Flow<SortBy> = flow { emit(SortBy.TITLE) }
@@ -56,25 +50,17 @@ class PreferenceRepositoryImpl(
     override val albumsSortByFlow: Flow<SortBy> = songsSortByFlow
     override val albumsSortOrderFlow: Flow<SortOrder> = songsSortOrderFlow
 
-    override val repeatModeFlow: Flow<PlaybackRepeatMode> = context.dataStore.data
-        .map { preferences ->
-            (preferences[REPEAT_MODE] ?: 0).asPlaybackRepeatMode()
-        }
+    override val repeatModeFlow: Flow<PlaybackRepeatMode>
+        get() = store.data.map { (it[REPEAT_MODE] ?: 0).asPlaybackRepeatMode() }
 
     override suspend fun updateRepeatMode(mode: PlaybackRepeatMode) {
-        context.dataStore.edit { preferences ->
-            preferences[REPEAT_MODE] = mode.asInt()
-        }
+        store.edit { it[REPEAT_MODE] = mode.asInt() }
     }
 
-    override val shuffleModeFlow: Flow<Boolean> = context.dataStore.data
-    .map { preferences ->
-        preferences[SHUFFLE_MODE] ?: false
-    }
+    override val shuffleModeFlow: Flow<Boolean>
+        get() = store.data.map { it[SHUFFLE_MODE] ?: false }
 
     override suspend fun updateShuffleMode(enable: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[SHUFFLE_MODE] = enable
-        }
+        store.edit { it[SHUFFLE_MODE] = enable }
     }
 }
