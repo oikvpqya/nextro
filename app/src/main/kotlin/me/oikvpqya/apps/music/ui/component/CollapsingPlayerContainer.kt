@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
 import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
-import me.oikvpqya.apps.music.ui.component.fake.ImageContainerSample
+import me.oikvpqya.apps.music.ui.component.fake.ImageMaxContainerSample
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_SIZE
 
 const val UI_PLAYER_SHARED_KEY_ARTWORK = "key_ui_player_artwork"
@@ -46,22 +46,16 @@ fun CollapsingPlayerContainer(
         summaryContainer = { SummaryContainer(summary) },
         iconContainer = {
             with(sharedTransitionScope) {
-                Box(
+                ArtworkContainer(
                     modifier = Modifier
                         .sharedElement(
                             state = rememberSharedContentState(key = UI_PLAYER_SHARED_KEY_ARTWORK),
                             animatedVisibilityScope = animatedVisibilityScope,
                         )
-                ) {
-                    if (artwork != null) {
-                        ImageContainerSample(
-                            data = artwork,
-                            size = LIST_TRACK_ALBUM_SIZE
-                        )
-                    } else {
-                        ImageContainerSample(size = LIST_TRACK_ALBUM_SIZE)
-                    }
-                }
+                        .clip(RoundedCornerShape(12.dp))
+                        .size(LIST_TRACK_ALBUM_SIZE),
+                    artwork = artwork,
+                )
             }
         },
         widgetContainer = {
@@ -104,6 +98,24 @@ fun CollapsingPlayerContainer(
         },
         enabledMarqueeText = true,
     )
+}
+
+@Composable
+private fun ArtworkContainer(
+    artwork: Any?,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+    ) {
+        if (artwork != null) {
+            ImageMaxContainerSample(
+                data = artwork,
+            )
+        } else {
+            ImageMaxContainerSample()
+        }
+    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
