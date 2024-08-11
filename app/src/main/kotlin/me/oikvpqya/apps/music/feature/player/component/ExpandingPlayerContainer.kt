@@ -44,6 +44,7 @@ import kotlin.math.max
 fun ExpandingPlayerContainer(
     animatedVisibilityScope: AnimatedVisibilityScope,
     sharedTransitionScope: SharedTransitionScope,
+    onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val mediaInfo by LocalMediaInfoState.current
@@ -90,6 +91,7 @@ fun ExpandingPlayerContainer(
                                         mediaHandler?.unlike(mediaInfo.song ?: savedSong)
                                     }
                                 },
+                                onMoreClick = onMoreClick,
                                 artwork = queue.getOrNull(queueIndex + 1)?.getArtworkUri(),
                             )
                         },
@@ -201,6 +203,7 @@ private fun ToolbarContainer(
     artwork: Any?,
     isFavorite: Boolean,
     onFavoriteClick: () -> Unit,
+    onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -239,7 +242,7 @@ private fun ToolbarContainer(
             )
         }
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = onMoreClick,
         ) {
 
             Icon(

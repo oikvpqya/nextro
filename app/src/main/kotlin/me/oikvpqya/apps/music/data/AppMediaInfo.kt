@@ -13,7 +13,8 @@ data class AppMediaInfo(
     val queue: List<Library.Song>,
     val queueIndex: Int,
     val repeatMode: PlaybackRepeatMode?,
-    val shuffleMode: Boolean?
+    val shuffleMode: Boolean?,
+    val volume: Float,
 ) {
     companion object {
         val Idle = AppMediaInfo(
@@ -25,7 +26,8 @@ data class AppMediaInfo(
             queue = emptyList(),
             queueIndex = 0,
             repeatMode = null,
-            shuffleMode = null
+            shuffleMode = null,
+            volume = 1f,
         )
     }
 }

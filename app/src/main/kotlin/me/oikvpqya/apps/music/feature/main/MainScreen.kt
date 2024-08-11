@@ -3,6 +3,8 @@ package me.oikvpqya.apps.music.feature.main
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +17,12 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -29,7 +33,10 @@ import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
@@ -48,6 +55,8 @@ import me.oikvpqya.apps.music.ui.util.LocalAppSnackbarHandler
 import me.oikvpqya.apps.music.feature.main.component.MainBottomBar
 import me.oikvpqya.apps.music.feature.player.component.ExpandingPlayerContainer
 import me.oikvpqya.apps.music.feature.startDestination
+import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
+import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.component.CollapsingPlayerContainer
 import me.oikvpqya.apps.music.ui.navigation.SheetRouteFactory
 import me.oikvpqya.apps.music.ui.navigation.create
@@ -102,6 +111,9 @@ fun MainScreen(
                             .fillMaxSize()
                             .padding(bottomSheetInnerPadding),
                         sheetState = bottomSheetState,
+                        onMoreClick = {
+                            navController.navigate(route = MainOverlay.PlayerModalBottomSheet)
+                        },
                     )
                 },
             )
@@ -161,6 +173,31 @@ private fun MainScreenSheetContent(
         modalBottomSheet<MainOverlay.InfoModalBottomSheet> {
             // TODO
         }
+        modalBottomSheet<MainOverlay.PlayerModalBottomSheet> {
+            // Volume Slider
+            val mediaInfo by LocalMediaInfoState.current
+            val mediaHandler by LocalMediaHandlerState.current
+            val volume = mediaInfo.volume
+            var sliderValue by remember { mutableFloatStateOf(volume) }
+            var onSliding by remember { mutableStateOf(false) }
+            val animateProgress by animateFloatAsState(
+                targetValue = if (onSliding) { sliderValue } else volume,
+                label = "",
+                animationSpec = tween(durationMillis = if (onSliding) 0 else 1000)
+            )
+            Slider(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                value = animateProgress,
+                onValueChange = { value ->
+                    onSliding = true
+                    sliderValue = value
+                    mediaHandler?.setVolume(sliderValue)
+                },
+                onValueChangeFinished = {
+                    onSliding = false
+                },
+            )
+        }
     }
 }
 
@@ -171,6 +208,7 @@ private fun MainScreenSheetContent(
 @Composable
 private fun MainScreenMainContent(
     sheetState: SheetState,
+    onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val nonHiddenHeight = with(LocalDensity.current) {
@@ -212,6 +250,7 @@ private fun MainScreenMainContent(
                     ExpandingPlayerContainer(
                         animatedVisibilityScope = this@AnimatedContent,
                         sharedTransitionScope = this@SharedTransitionLayout,
+                        onMoreClick = onMoreClick,
                     )
                 }
             }

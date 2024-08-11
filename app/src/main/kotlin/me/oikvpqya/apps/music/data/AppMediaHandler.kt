@@ -18,4 +18,5 @@ interface AppMediaHandler {
     fun disableShuffleMode()
     fun seekToPrevious()
     fun seekToNext()
+    fun setVolume(value: Float)
 }

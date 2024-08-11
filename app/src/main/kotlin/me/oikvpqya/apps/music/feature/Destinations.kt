@@ -45,6 +45,9 @@ sealed interface MainOverlay : Destination {
         val summary: String,
         val mediaId: Long,
     ) : MainOverlay
+
+    @Serializable
+    data object PlayerModalBottomSheet : MainOverlay
 }
 
 val MainDestination.startDestination: Destination

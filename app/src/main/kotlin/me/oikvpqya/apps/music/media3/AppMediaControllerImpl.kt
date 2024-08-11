@@ -138,7 +138,8 @@ class AppMediaControllerImpl(
                     queue = queue,
                     queueIndex = currentMediaItemIndex,
                     repeatMode = modePair.first,
-                    shuffleMode = modePair.second
+                    shuffleMode = modePair.second,
+                    volume = volume,
                 )
                     .also {
                         if (it.isPlaying) {
@@ -159,7 +160,8 @@ class AppMediaControllerImpl(
                 queue = queue,
                 queueIndex = index,
                 repeatMode = modePair.first,
-                shuffleMode = modePair.second
+                shuffleMode = modePair.second,
+                volume = 1f,
             )
         }
     }
@@ -297,6 +299,15 @@ class AppMediaControllerImpl(
                     with(mediaController) {
                         if (!isConnected) return@launch
                         seekToNextMediaItem()
+                    }
+                }
+            }
+
+            override fun setVolume(value: Float) {
+                scope.launch {
+                    with(mediaController) {
+                        if (!isConnected) return@launch
+                        volume = value.coerceIn(0f..1f)
                     }
                 }
             }
