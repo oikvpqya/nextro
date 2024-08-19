@@ -13,6 +13,7 @@ interface AppDatabaseRepository {
     val topAlbumsFlow: Flow<List<Libraries.Album>>
     val topArtistsFlow: Flow<List<Libraries.Default>>
     val topSongsFlow: Flow<List<Library.Song>>
+    val songsFlow: Flow<List<Library.Song>>
 
     suspend fun createPlaylist(name: String)
     suspend fun setFavorite(songs: List<MediaItem>)
@@ -20,6 +21,7 @@ interface AppDatabaseRepository {
     suspend fun setQueues(songs: List<MediaItem>)
     suspend fun setHistory(songs: List<MediaItem>)
     suspend fun upsertSongs(songs: List<Library.Song>)
+    suspend fun deleteSongs()
 
     fun isFavoriteFlow(song: MediaItem): Flow<Boolean>
 }

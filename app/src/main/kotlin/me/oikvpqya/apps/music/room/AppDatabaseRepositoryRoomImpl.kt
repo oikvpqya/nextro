@@ -78,6 +78,9 @@ class AppDatabaseRepositoryRoomImpl(
     override val topSongsFlow: Flow<List<Library.Song.PlayCount>>
         get() = playCountDao.getAll()
 
+    override val songsFlow: Flow<List<Library.Song.Default>>
+        get() = songDao.getSongsByASC()
+
     override suspend fun createPlaylist(name: String) {
         playlistNameDao.insert(name)
     }
@@ -151,6 +154,18 @@ class AppDatabaseRepositoryRoomImpl(
             invalidationTracker.refreshAsync()
         }
     }
+
+    override suspend fun deleteSongs() {
+        with(appDatabase) {
+            useWriterConnection { transactor ->
+                transactor.immediateTransaction {
+                    songDao.deleteAll()
+                }
+            }
+            // Manually triggers invalidation
+            invalidationTracker.refreshAsync()
+        }
+    }
 }
 
 @Inject
@@ -169,6 +184,8 @@ class AppDatabaseRepositoryRoomFake : AppDatabaseRepository {
         get() = flow {  }
     override val topSongsFlow: Flow<List<Library.Song>>
         get() = flow {  }
+    override val songsFlow: Flow<List<Library.Song>>
+        get() = flow {  }
 
     override suspend fun createPlaylist(name: String) {
     }
@@ -186,6 +203,9 @@ class AppDatabaseRepositoryRoomFake : AppDatabaseRepository {
     }
 
     override suspend fun upsertSongs(songs: List<Library.Song>) {
+    }
+
+    override suspend fun deleteSongs() {
     }
 
     override fun isFavoriteFlow(song: MediaItem): Flow<Boolean> = flow {  }

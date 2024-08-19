@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.model.Tag
 
@@ -50,9 +51,30 @@ interface SongDao {
     @Query(
         value = """
         SELECT song.* FROM song
+        ORDER BY song.title ASC
     """
     )
-    fun getAll(): Flow<List<Library.Song.Default>>
+    fun getSongsByASC(): Flow<List<Library.Song.Default>>
+
+    @Query(
+        value = """
+        SELECT song.albumArtist, song.genre, song.year, song.albumId, song.album AS name, count(*) AS size
+        FROM song
+        GROUP BY name
+        ORDER BY name ASC
+    """
+    )
+    fun getAlbumsByASC(): Flow<List<Libraries.Album>>
+
+    @Query(
+        value = """
+        SELECT song.albumId, song.artist AS name, count(*) AS size
+        FROM song
+        GROUP BY name
+        ORDER BY name ASC
+    """
+    )
+    fun getArtistByASC(): Flow<List<Libraries.Default>>
 
     @Query(
         value = """

@@ -122,25 +122,51 @@ sealed interface Libraries: Library {
 
     @Serializable
     data class Album(
-        override val tag: Tag.Album,
+        val albumArtist: String,
+        val genre: String,
+        val year: Long,
+        val albumId: Long,
+        override val name: String,
         override val size: Int,
-        override val name: String = tag.name,
-        override val summary: String = tag.albumArtist
-    ) : Libraries
+    ) : Libraries {
+        override val summary: String
+            get() = albumArtist
+        override val tag: Tag
+            get() = Tag.Album(albumArtist, genre, name, year, albumId)
+        constructor(tag: Tag.Album, size: Int) : this(
+            tag.albumArtist, tag.genre, tag.year, tag.albumId, tag.name, size
+        )
+    }
 
     @Serializable
     data class Playlist(
-        override val tag: Tag.Default,
+        val albumId: Long,
+        override val name: String,
         override val size: Int,
-        override val name: String = tag.name,
-        override val summary: String = "$size songs",
-    ) : Libraries
+    ) : Libraries {
+        override val tag: Tag.Default
+            get() = Tag.Default(
+                name = name,
+                albumId = albumId,
+            )
+        override val summary: String
+            get() = "$size songs"
+        constructor(tag: Tag.Default, size: Int) : this(tag.albumId, tag.name, size)
+    }
 
     @Serializable
     data class Default(
-        override val tag: Tag.Default,
+        val albumId: Long,
+        override val name: String,
         override val size: Int,
-        override val name: String = tag.name,
-        override val summary: String = "$size songs",
-    ) : Libraries
+    ) : Libraries {
+        override val tag: Tag.Default
+            get() = Tag.Default(
+                name = name,
+                albumId = albumId,
+            )
+        override val summary: String
+            get() = "$size songs"
+        constructor(tag: Tag.Default, size: Int) : this(tag.albumId, tag.name, size)
+    }
 }
