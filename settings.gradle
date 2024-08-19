@@ -18,12 +18,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "android-oikvpqya-apps-music"
-// include ":androidApp"
-// include ":composeApp"
 include ":app"
 include ":data:models"
 include ":feature:features"
-//include ":library"
 
 // include ":core:datastore"
 // include ":core:mediastore"
