@@ -217,22 +217,19 @@ class AppMediaControllerImpl(
 
             override fun like(item: Library.Song?) {
                 scope.launch {
-                    if (item != null) {
-                        databaseRepository.setFavorite(listOf(item.tag.asMediaItem()))
-                    }
+                    item?.tag?.mediaId?.let { databaseRepository.setFavorite(listOf(it)) }
                 }
             }
 
             override fun unlike(item: Library.Song?) {
                 scope.launch {
-                    if (item != null) {
-                        databaseRepository.deleteFavorite(listOf(item.tag.asMediaItem()))
-                    }
+                    item?.tag?.mediaId?.let { databaseRepository.deleteFavorite(listOf(it)) }
                 }
             }
 
             override fun isFavoriteSharedFlow(item: Library.Song?): SharedFlow<Boolean> {
-                return (if (item != null) databaseRepository.isFavoriteFlow(item.tag.asMediaItem()) else flow {})
+                val flow = item?.tag?.mediaId?.let { databaseRepository.isFavoriteFlow(it) }
+                return (flow ?: flow {})
                     .shareIn(
                         scope = scope,
                         started = SharingStarted.WhileSubscribed(),

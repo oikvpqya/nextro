@@ -1,6 +1,5 @@
 package me.oikvpqya.apps.music.data
 
-import androidx.media3.common.MediaItem
 import kotlinx.coroutines.flow.Flow
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
@@ -16,12 +15,12 @@ interface AppDatabaseRepository {
     val songsFlow: Flow<List<Library.Song>>
 
     suspend fun createPlaylist(name: String)
-    suspend fun setFavorite(songs: List<MediaItem>)
-    suspend fun deleteFavorite(songs: List<MediaItem>)
-    suspend fun setQueues(songs: List<MediaItem>)
-    suspend fun setHistory(songs: List<MediaItem>)
+    suspend fun setFavorite(mediaIds: List<Long>)
+    suspend fun deleteFavorite(mediaIds: List<Long>)
+    suspend fun setQueues(mediaIds: List<Long>)
+    suspend fun setHistory(mediaIds: List<Long>)
     suspend fun upsertSongs(songs: List<Library.Song>)
     suspend fun deleteSongs()
 
-    fun isFavoriteFlow(song: MediaItem): Flow<Boolean>
+    fun isFavoriteFlow(mediaId: Long): Flow<Boolean>
 }

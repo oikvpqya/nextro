@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import me.oikvpqya.apps.music.data.AppDatabaseRepository
 import me.oikvpqya.apps.music.data.MediaStoreRepository
-import me.oikvpqya.apps.music.media3.util.asMediaItem
 import me.oikvpqya.apps.music.model.Library
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -165,12 +164,12 @@ class LibraryViewModel(
 
     fun like(songs: List<Library.Song>) {
         viewModelScope.launch {
-            databaseRepository.setFavorite(songs.map { it.tag.asMediaItem() })
+            databaseRepository.setFavorite(songs.map { it.tag.mediaId })
         }
     }
 
     fun isFavoriteSharedFlow(song: Library.Song): SharedFlow<Boolean> {
-        return databaseRepository.isFavoriteFlow(song.tag.asMediaItem())
+        return databaseRepository.isFavoriteFlow(song.tag.mediaId)
             .shareIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),

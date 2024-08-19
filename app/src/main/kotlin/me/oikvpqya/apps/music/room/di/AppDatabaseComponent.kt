@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import me.oikvpqya.apps.music.app.di.ApplicationScope
 import me.oikvpqya.apps.music.data.AppDatabaseRepository
 import me.oikvpqya.apps.music.room.AppDatabase
-import me.oikvpqya.apps.music.room.AppDatabaseRepositoryRoomFake
 import me.oikvpqya.apps.music.room.AppDatabaseRepositoryRoomImpl
 import me.oikvpqya.apps.music.room.dao.*
 import me.tatarka.inject.annotations.Provides
@@ -19,7 +18,6 @@ interface AppDatabaseComponent {
     @ApplicationScope
     @Provides
     fun bindAppDatabaseRepository(bind: AppDatabaseRepositoryRoomImpl): AppDatabaseRepository = bind
-//    fun bindAppDatabaseRepository(bind: AppDatabaseRepositoryRoomFake): AppDatabaseRepository = bind
 
     @ApplicationScope
     @Provides

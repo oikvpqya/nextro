@@ -79,9 +79,8 @@ interface MediaLibrarySessionComponent {
                             val currentMediaItemIndex = this@apply.currentMediaItemIndex
                             coroutineScope.launch {
                                 preferenceRepository.updateQueueIndex(currentMediaItemIndex)
-                                if (mediaItem != null) {
-                                    databaseRepository.setHistory(listOf(mediaItem))
-                                }
+                                mediaItem?.mediaId?.toLongOrNull()
+                                    ?.let { databaseRepository.setHistory(listOf(it)) }
                             }
                         }
 
@@ -116,7 +115,8 @@ interface MediaLibrarySessionComponent {
                 mediaItems: MutableList<MediaItem>
             ): ListenableFuture<MutableList<MediaItem>> {
                 return coroutineScope.future {
-                    databaseRepository.setQueues(mediaItems)
+                    mediaItems.mapNotNull { it.mediaId.toLongOrNull() }
+                        .let { databaseRepository.setQueues(it) }
                     mediaItems
                 }
             }

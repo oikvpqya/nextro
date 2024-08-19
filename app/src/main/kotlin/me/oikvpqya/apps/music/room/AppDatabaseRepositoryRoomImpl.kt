@@ -1,14 +1,11 @@
 package me.oikvpqya.apps.music.room
 
-import androidx.media3.common.MediaItem
 import androidx.room.immediateTransaction
 import androidx.room.useWriterConnection
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import me.oikvpqya.apps.music.data.AppDatabaseRepository
-import me.oikvpqya.apps.music.media3.util.asTag
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.model.Tag
@@ -85,17 +82,16 @@ class AppDatabaseRepositoryRoomImpl(
         playlistNameDao.insert(name)
     }
 
-    override suspend fun setFavorite(songs: List<MediaItem>) {
+    override suspend fun setFavorite(mediaIds: List<Long>) {
         with(appDatabase) {
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
-                    songs.forEach { song ->
+                    mediaIds.forEach { mediaId ->
                         with(favoriteDao) {
-                            val tag = song.asTag()
-                            if (getOneShot(tag.mediaId) != null) {
-                                delete(tag.mediaId)
+                            if (getOneShot(mediaId) != null) {
+                                delete(mediaId)
                             } else {
-                                upsert(tag.mediaId)
+                                upsert(mediaId)
                             }
                         }
                     }
@@ -106,14 +102,14 @@ class AppDatabaseRepositoryRoomImpl(
         }
     }
 
-    override suspend fun deleteFavorite(songs: List<MediaItem>) = setFavorite(songs)
+    override suspend fun deleteFavorite(mediaIds: List<Long>) = setFavorite(mediaIds)
 
-    override suspend fun setQueues(songs: List<MediaItem>) {
+    override suspend fun setQueues(mediaIds: List<Long>) {
         with(appDatabase) {
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
                     queueDao.deleteAll()
-                    songs.forEach { queueDao.insert(it.asTag().mediaId) }
+                    mediaIds.forEach { queueDao.insert(it) }
                 }
             }
             // Manually triggers invalidation
@@ -121,15 +117,14 @@ class AppDatabaseRepositoryRoomImpl(
         }
     }
 
-    override suspend fun setHistory(songs: List<MediaItem>) {
+    override suspend fun setHistory(mediaIds: List<Long>) {
         with(appDatabase) {
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
                     val epochMilliseconds = Clock.System.now().toEpochMilliseconds()
-                    songs.forEach { song ->
-                        val tag = song.asTag()
-                        historyDao.insert(epochMilliseconds, tag.mediaId)
-                        playCountDao.upsert(tag.mediaId)
+                    mediaIds.forEach { mediaId ->
+                        historyDao.insert(epochMilliseconds, mediaId)
+                        playCountDao.upsert(mediaId)
                     }
                 }
             }
@@ -138,8 +133,7 @@ class AppDatabaseRepositoryRoomImpl(
         }
     }
 
-    override fun isFavoriteFlow(song: MediaItem): Flow<Boolean> {
-        val mediaId = song.asTag().mediaId
+    override fun isFavoriteFlow(mediaId: Long): Flow<Boolean> {
         return favoriteDao.get(mediaId).map { it != null }
     }
 
@@ -166,47 +160,4 @@ class AppDatabaseRepositoryRoomImpl(
             invalidationTracker.refreshAsync()
         }
     }
-}
-
-@Inject
-class AppDatabaseRepositoryRoomFake : AppDatabaseRepository {
-    override val favoriteFlow: Flow<List<Library.Song.Default>>
-        get() = flow {  }
-    override val historyFlow: Flow<List<Library.Song>>
-        get() = flow {  }
-    override val playlistsFlow: Flow<List<Libraries.Playlist>>
-        get() = flow {  }
-    override val queueFlow: Flow<List<Library.Song.Default>>
-        get() = flow {  }
-    override val topAlbumsFlow: Flow<List<Libraries.Album>>
-        get() = flow {  }
-    override val topArtistsFlow: Flow<List<Libraries.Default>>
-        get() = flow {  }
-    override val topSongsFlow: Flow<List<Library.Song>>
-        get() = flow {  }
-    override val songsFlow: Flow<List<Library.Song>>
-        get() = flow {  }
-
-    override suspend fun createPlaylist(name: String) {
-    }
-
-    override suspend fun setFavorite(songs: List<MediaItem>) {
-    }
-
-    override suspend fun deleteFavorite(songs: List<MediaItem>) {
-    }
-
-    override suspend fun setQueues(songs: List<MediaItem>) {
-    }
-
-    override suspend fun setHistory(songs: List<MediaItem>) {
-    }
-
-    override suspend fun upsertSongs(songs: List<Library.Song>) {
-    }
-
-    override suspend fun deleteSongs() {
-    }
-
-    override fun isFavoriteFlow(song: MediaItem): Flow<Boolean> = flow {  }
 }
