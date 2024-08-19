@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.component.AppIcons
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
 
 @Composable
 fun ToolBar(

@@ -39,7 +39,6 @@ import me.oikvpqya.apps.music.feature.library.screen.SongsScreen
 import me.oikvpqya.apps.music.feature.library.screen.SuggestionsScreen
 import me.oikvpqya.apps.music.feature.library.screen.TopPlayingScreen
 import me.oikvpqya.apps.music.feature.library.viewmodel.LibraryViewModel
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.model.Tag
@@ -48,6 +47,7 @@ import me.oikvpqya.apps.music.ui.component.AppIcons
 import me.oikvpqya.apps.music.ui.component.icons.History
 import me.oikvpqya.apps.music.ui.component.icons.TrendingUp
 import me.oikvpqya.apps.music.ui.composable.AppDragHandle
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

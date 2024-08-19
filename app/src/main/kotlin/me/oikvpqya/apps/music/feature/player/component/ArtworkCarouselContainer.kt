@@ -36,10 +36,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.oikvpqya.apps.music.feature.player.ARTWORK_PADDING
 import me.oikvpqya.apps.music.feature.player.CAROUSEL_DEFAULT_MIN_WIDTH
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.ui.component.fake.ImageContainerLayoutSample
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 

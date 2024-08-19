@@ -17,7 +17,6 @@ import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
@@ -55,9 +54,9 @@ import me.oikvpqya.apps.music.ui.util.LocalAppSnackbarHandler
 import me.oikvpqya.apps.music.feature.main.component.MainBottomBar
 import me.oikvpqya.apps.music.feature.player.component.ExpandingPlayerContainer
 import me.oikvpqya.apps.music.feature.startDestination
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.component.CollapsingPlayerContainer
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.navigation.SheetRouteFactory
 import me.oikvpqya.apps.music.ui.navigation.create
 import me.oikvpqya.apps.music.ui.util.APP_BAR_CONTAINER_HEIGHT

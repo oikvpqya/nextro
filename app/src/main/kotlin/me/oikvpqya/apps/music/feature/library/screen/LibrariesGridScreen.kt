@@ -3,7 +3,6 @@ package me.oikvpqya.apps.music.feature.library.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,16 +12,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.ui.component.ChannelContainer
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 import me.oikvpqya.apps.music.ui.component.fake.ImageMaxContainerSample
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 
 @Composable
 fun LibrariesGridScreen(

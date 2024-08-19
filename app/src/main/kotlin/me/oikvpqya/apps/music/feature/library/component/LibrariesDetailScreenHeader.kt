@@ -16,12 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
-import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.ui.component.AppIcons
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 import me.oikvpqya.apps.music.ui.component.fake.ImageContainerSample
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_LARGE_NORMAL_SIZE
 
 @Composable

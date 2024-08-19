@@ -27,15 +27,15 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
 import androidx.compose.ui.util.fastMaxBy
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.ui.component.AppIcons
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 import me.oikvpqya.apps.music.ui.component.UI_PLAYER_SHARED_KEY_ARTWORK
 import me.oikvpqya.apps.music.ui.component.fake.ImageContainerSample
 import me.oikvpqya.apps.music.ui.component.fake.ImageMaxContainerSample
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_NORMAL_SIZE
 import kotlin.math.max
 

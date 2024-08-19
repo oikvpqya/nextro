@@ -13,13 +13,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import me.oikvpqya.apps.music.feature.library.component.LibrariesDetailScreenHeader
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
 import me.oikvpqya.apps.music.ui.component.TrackContainer
 import me.oikvpqya.apps.music.ui.component.fake.ImageContainerSample
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_SIZE
 
 @Composable

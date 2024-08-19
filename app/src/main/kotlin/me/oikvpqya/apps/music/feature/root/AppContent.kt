@@ -22,8 +22,10 @@ import me.oikvpqya.apps.music.feature.RootRouteFactory
 import me.oikvpqya.apps.music.feature.permission.PermissionRoute
 import me.oikvpqya.apps.music.data.AppMediaController
 import me.oikvpqya.apps.music.data.AppMediaInfo
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
+import me.oikvpqya.apps.music.data.ArtworkProvider
+import me.oikvpqya.apps.music.ui.media.LocalArtworkProvider
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.navigation.RouteFactory
 import me.oikvpqya.apps.music.ui.navigation.create
 import me.oikvpqya.apps.music.ui.theme.AppBackground
@@ -42,6 +44,7 @@ interface AppContent {
 
 @Inject
 class AppContentImpl(
+    private val artworkProvider: ArtworkProvider,
     private val mediaSynchronizer: Lazy<MediaSynchronizer>,
     private val mediaController: Lazy<AppMediaController>,
     private val rootRouteFactories: Set<RootRouteFactory>,
@@ -61,6 +64,7 @@ class AppContentImpl(
         )
 
         CompositionLocalProvider(
+            LocalArtworkProvider provides artworkProvider,
             LocalAppSnackbarHandler provides snackbarHandler,
 //            LocalWindowSizeClass provides windowSizeClass,
         ) {

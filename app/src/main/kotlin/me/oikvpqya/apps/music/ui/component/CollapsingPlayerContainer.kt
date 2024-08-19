@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.unit.dp
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.ui.component.fake.ImageMaxContainerSample
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 import me.oikvpqya.apps.music.ui.util.LIST_TRACK_ALBUM_SIZE
 
 const val UI_PLAYER_SHARED_KEY_ARTWORK = "key_ui_player_artwork"

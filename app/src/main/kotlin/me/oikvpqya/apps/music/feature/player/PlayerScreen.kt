@@ -1,6 +1,5 @@
 package me.oikvpqya.apps.music.feature.player
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,10 +19,10 @@ import me.oikvpqya.apps.music.feature.player.component.ArtworkCarouselContainer
 import me.oikvpqya.apps.music.feature.player.component.ControlBar
 import me.oikvpqya.apps.music.feature.player.component.ProgressSlider
 import me.oikvpqya.apps.music.feature.player.component.ToolBar
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
-import me.oikvpqya.apps.music.media3.compose.LocalMediaInfoState
 import me.oikvpqya.apps.music.ui.component.SummaryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
+import me.oikvpqya.apps.music.ui.media.LocalMediaInfoState
 
 val CAROUSEL_MIN_WIDTH = 40.dp..56.dp
 val CAROUSEL_DEFAULT_MIN_WIDTH = CAROUSEL_MIN_WIDTH.start

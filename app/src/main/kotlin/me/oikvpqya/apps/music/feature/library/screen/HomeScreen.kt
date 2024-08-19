@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import kotlinx.collections.immutable.ImmutableList
-import me.oikvpqya.apps.music.media3.compose.LocalMediaHandlerState
 import me.oikvpqya.apps.music.model.Libraries
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.ui.component.ColumnLibrariesContainer
@@ -19,6 +18,7 @@ import me.oikvpqya.apps.music.ui.component.ColumnLibraryContainer
 import me.oikvpqya.apps.music.ui.component.HeaderContainer
 import me.oikvpqya.apps.music.ui.component.RandomTiledLibraryContainer
 import me.oikvpqya.apps.music.ui.component.TitleContainer
+import me.oikvpqya.apps.music.ui.media.LocalMediaHandlerState
 
 @Deprecated(
     message = "unused"

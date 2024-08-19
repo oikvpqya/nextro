@@ -20,9 +20,9 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import me.oikvpqya.apps.music.mediastore.util.getArtworkUri
 import me.oikvpqya.apps.music.model.Library
 import me.oikvpqya.apps.music.ui.component.fake.ImageContainerSample
+import me.oikvpqya.apps.music.ui.media.getArtworkUri
 import kotlin.random.Random
 
 @Composable
