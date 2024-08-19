@@ -30,6 +30,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -187,6 +188,8 @@ private fun MainScreenSheetContent(
             Slider(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 value = animateProgress,
+                valueRange = 0f..1f,
+                steps = 9,
                 onValueChange = { value ->
                     onSliding = true
                     sliderValue = value
