@@ -21,6 +21,7 @@ interface AppDatabaseRepository {
     suspend fun setHistory(mediaIds: List<Long>)
     suspend fun upsertSongs(songs: List<Library.Song>)
     suspend fun deleteSongs()
+    suspend fun deleteAndInsertSongs(songs: List<Library.Song>)
 
     fun isFavoriteFlow(mediaId: Long): Flow<Boolean>
 }

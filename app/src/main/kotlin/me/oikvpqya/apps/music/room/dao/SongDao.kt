@@ -115,8 +115,3 @@ interface SongDao {
     )
     suspend fun deleteAll()
 }
-
-suspend fun SongDao.upsert(tag: Tag.Song) {
-    with(tag) { upsert(mediaId, album, artist, title, albumArtist, composer, data, dateModified,
-            duration, genre, trackNumber, year, albumId) }
-}

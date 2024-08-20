@@ -1,5 +1,6 @@
 package me.oikvpqya.apps.music.room
 
+import androidx.room.exclusiveTransaction
 import androidx.room.immediateTransaction
 import androidx.room.useWriterConnection
 import kotlinx.coroutines.flow.Flow
@@ -87,11 +88,13 @@ class AppDatabaseRepositoryRoomImpl(
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
                     mediaIds.forEach { mediaId ->
-                        with(favoriteDao) {
-                            if (getOneShot(mediaId) != null) {
-                                delete(mediaId)
-                            } else {
-                                upsert(mediaId)
+                        withNestedTransaction {
+                            with(favoriteDao) {
+                                if (getOneShot(mediaId) != null) {
+                                    delete(mediaId)
+                                } else {
+                                    upsert(mediaId)
+                                }
                             }
                         }
                     }
@@ -108,8 +111,8 @@ class AppDatabaseRepositoryRoomImpl(
         with(appDatabase) {
             useWriterConnection { transactor ->
                 transactor.immediateTransaction {
-                    queueDao.deleteAll()
-                    mediaIds.forEach { queueDao.insert(it) }
+                    withNestedTransaction { queueDao.deleteAll() }
+                    mediaIds.forEach { withNestedTransaction { queueDao.insert(it) } }
                 }
             }
             // Manually triggers invalidation
@@ -123,8 +126,8 @@ class AppDatabaseRepositoryRoomImpl(
                 transactor.immediateTransaction {
                     val epochMilliseconds = Clock.System.now().toEpochMilliseconds()
                     mediaIds.forEach { mediaId ->
-                        historyDao.insert(epochMilliseconds, mediaId)
-                        playCountDao.upsert(mediaId)
+                        withNestedTransaction { historyDao.insert(epochMilliseconds, mediaId) }
+                        withNestedTransaction { playCountDao.upsert(mediaId) }
                     }
                 }
             }
@@ -140,8 +143,8 @@ class AppDatabaseRepositoryRoomImpl(
     override suspend fun upsertSongs(songs: List<Library.Song>) {
         with(appDatabase) {
             useWriterConnection { transactor ->
-                transactor.immediateTransaction {
-                    songs.forEach { songDao.upsert(it.tag) }
+                transactor.exclusiveTransaction {
+                    songs.forEach { song -> withNestedTransaction { songDao.upsert(song.tag) } }
                 }
             }
             // Manually triggers invalidation
@@ -152,12 +155,30 @@ class AppDatabaseRepositoryRoomImpl(
     override suspend fun deleteSongs() {
         with(appDatabase) {
             useWriterConnection { transactor ->
-                transactor.immediateTransaction {
+                transactor.exclusiveTransaction {
                     songDao.deleteAll()
                 }
             }
             // Manually triggers invalidation
             invalidationTracker.refreshAsync()
         }
+    }
+
+    override suspend fun deleteAndInsertSongs(songs: List<Library.Song>) {
+        with(appDatabase) {
+            useWriterConnection { transactor ->
+                transactor.exclusiveTransaction {
+                    withNestedTransaction { songDao.deleteAll() }
+                    songs.forEach { song -> withNestedTransaction { songDao.upsert(song.tag) } }
+                }
+            }
+            // Manually triggers invalidation
+            invalidationTracker.refreshAsync()
+        }
+    }
+
+    private suspend fun SongDao.upsert(tag: Tag.Song) {
+        with(tag) { upsert(mediaId, album, artist, title, albumArtist, composer, data, dateModified,
+            duration, genre, trackNumber, year, albumId) }
     }
 }
