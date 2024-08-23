@@ -1,6 +1,5 @@
 plugins {
     alias libs.plugins.android.library
-    alias libs.plugins.google.ksp
     alias libs.plugins.kotlin.android
     alias libs.plugins.kotlin.serialization
 }
@@ -10,18 +9,17 @@ kotlin {
 }
 
 android {
-    compileSdk 35
+    compileSdk 34
     namespace "me.oikvpqya.apps.music.data.models"
 
     defaultConfig {
         minSdk 21
-        targetSdk 35
+        targetSdk 34
     }
 }
 
 dependencies {
     implementation libs.kotlinx.coroutines.core
     implementation libs.kotlinx.serialization.core
-    ksp libs.tatarka.inject.compiler
     implementation libs.tatarka.inject.runtime
 }

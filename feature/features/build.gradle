@@ -1,7 +1,6 @@
 plugins {
     alias libs.plugins.android.library
     alias libs.plugins.compose.compiler
-    alias libs.plugins.google.ksp
     alias libs.plugins.kotlin.android
     alias libs.plugins.kotlin.serialization
 }
@@ -11,12 +10,12 @@ kotlin {
 }
 
 android {
-    compileSdk 35
+    compileSdk 34
     namespace "me.oikvpqya.apps.music.feature.features"
 
     defaultConfig {
         minSdk 21
-        targetSdk 35
+        targetSdk 34
     }
     buildFeatures {
         compose true
@@ -30,8 +29,7 @@ dependencies {
     implementation libs.kotlinx.datetime
     implementation libs.kotlinx.serialization.core
 
-    api platform("dev.chrisbanes.compose:compose-bom:2024.08.00-alpha01")
-//    api platform("androidx.compose:compose-bom:2024.06.00")
+    api platform(libs.chrisbanes.compose.bom)
     implementation "androidx.compose.material:material-icons-extended"
     implementation "androidx.compose.material3:material3"
     implementation "androidx.compose.material3:material3-window-size-class"
@@ -48,6 +46,5 @@ dependencies {
     implementation libs.coil.coil2.compose
     implementation libs.google.accompanist.permissions
 
-    ksp libs.tatarka.inject.compiler
     implementation libs.tatarka.inject.runtime
 }
