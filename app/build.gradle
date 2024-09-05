@@ -56,7 +56,7 @@ dependencies {
 
     implementation libs.bundles.androidx.media3
 
-    api platform(libs.chrisbanes.compose.bom)
+    api platform(libs.androidx.compose.bom)
     implementation "androidx.compose.ui:ui"
 
     implementation libs.androidx.activity.compose

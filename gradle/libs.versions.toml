@@ -1,28 +1,23 @@
 [versions]
 androidGradlePlugin = "8.5.2"
-androidxActivity = "1.9.1"
-androidxComposeBom = "2024.06.00"
+androidxActivity = "1.9.2"
+androidxComposeBom = "2024.09.00"
 androidxCore = "1.13.1"
 androidxDatastore = "1.1.1"
-androidxLifecycle = "2.8.4"
-androidxMedia3 = "1.4.0"
-androidxNavigation = "2.8.0-rc01"
-androidxPaging = "3.3.1"
+androidxLifecycle = "2.8.5"
+androidxMedia3 = "1.4.1"
+androidxNavigation = "2.8.0"
 androidxRoom = "2.7.0-alpha07"
 androidxSqlite = "2.5.0-alpha07"
 chrisbanesComposeBom = "2024.08.00-alpha02"
 coilCoil2 = "2.7.0"
-coilCoil3 = "3.0.0-alpha07"
-googleAccompanist = "0.34.0"
+googleAccompanist = "0.36.0"
 googleKsp = "2.0.20-1.0.24"
-jetbrainsCompose = "1.6.11"
-jetbrainsLifecycle = "2.8.0"
-jetbrainsNavigation = "2.7.7"
 kotlin = "2.0.20"
 kotlinxCollectionsImmutable = "0.3.7"
 kotlinxCoroutines = "1.8.1"
-kotlinxDatetime = "0.6.0"
-kotlinxSerialization = "1.7.1"
+kotlinxDatetime = "0.6.1"
+kotlinxSerialization = "1.7.2"
 tatarkaInject = "0.7.1"
 
 [libraries]
@@ -38,24 +33,17 @@ androidx-media3-session = { module = "androidx.media3:media3-session", version.r
 # https://developer.android.com/kotlin/multiplatform/room
 # https://developer.android.com/kotlin/multiplatform/sqlite
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
-androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "androidxPaging" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidxSqlite" }
 chrisbanes-compose-bom = { module = "dev.chrisbanes.compose:compose-bom", version.ref = "chrisbanesComposeBom" }
 coil-coil2-common = { module = "io.coil-kt:coil", version.ref = "coilCoil2" }
 coil-coil2-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCoil2" }
-coil-coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCoil3" }
-coil-coil3-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCoil3" }
 google-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "googleAccompanist" }
-jetbrains-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jetbrainsLifecycle" }
-jetbrains-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrainsLifecycle" }
-jetbrains-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "jetbrainsNavigation" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
-kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
@@ -67,7 +55,6 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "googleKsp" }
-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jetbrainsCompose" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }

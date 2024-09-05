@@ -29,7 +29,7 @@ dependencies {
     implementation libs.kotlinx.datetime
     implementation libs.kotlinx.serialization.core
 
-    api platform(libs.chrisbanes.compose.bom)
+    api platform(libs.androidx.compose.bom)
     implementation "androidx.compose.material:material-icons-extended"
     implementation "androidx.compose.material3:material3"
     implementation "androidx.compose.material3:material3-window-size-class"
