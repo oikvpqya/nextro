@@ -1,7 +1,7 @@
 [versions]
-androidGradlePlugin = "8.5.2"
+androidGradlePlugin = "8.6.0"
 androidxActivity = "1.9.2"
-androidxComposeBom = "2024.09.00"
+androidxComposeBom = "2024.09.01"
 androidxCore = "1.13.1"
 androidxDatastore = "1.1.1"
 androidxLifecycle = "2.8.5"
@@ -9,16 +9,15 @@ androidxMedia3 = "1.4.1"
 androidxNavigation = "2.8.0"
 androidxRoom = "2.7.0-alpha07"
 androidxSqlite = "2.5.0-alpha07"
-chrisbanesComposeBom = "2024.08.00-alpha02"
 coilCoil2 = "2.7.0"
 googleAccompanist = "0.36.0"
-googleKsp = "2.0.20-1.0.24"
+googleKsp = "2.0.20-1.0.25"
 kotlin = "2.0.20"
-kotlinxCollectionsImmutable = "0.3.7"
-kotlinxCoroutines = "1.8.1"
+kotlinxCollectionsImmutable = "0.3.8"
+kotlinxCoroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxSerialization = "1.7.2"
-tatarkaInject = "0.7.1"
+tatarkaInject = "0.7.2"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
@@ -30,18 +29,16 @@ androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-ru
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidxMedia3" }
 androidx-media3-session = { module = "androidx.media3:media3-session", version.ref = "androidxMedia3" }
-# https://developer.android.com/kotlin/multiplatform/room
-# https://developer.android.com/kotlin/multiplatform/sqlite
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
+# https://developer.android.com/kotlin/multiplatform/room
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
+# https://developer.android.com/kotlin/multiplatform/sqlite
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidxSqlite" }
-chrisbanes-compose-bom = { module = "dev.chrisbanes.compose:compose-bom", version.ref = "chrisbanesComposeBom" }
 coil-coil2-common = { module = "io.coil-kt:coil", version.ref = "coilCoil2" }
 coil-coil2-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCoil2" }
 google-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "googleAccompanist" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
